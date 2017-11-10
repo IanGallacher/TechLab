@@ -1,8 +1,8 @@
 #include <sstream>
 #include <vector>
 
-#include "util/Debug.h"
-#include "util/Util.h"
+#include "TechLab/util/Debug.h"
+#include "TechLab/util/Util.h"
 
 
 float max_z_ = 11;
@@ -174,10 +174,6 @@ void DebugManager::DrawAllUnitInformation() const
 {
     std::stringstream ss;
     const std::map<sc2::Tag, UnitInfo> ui = information_manager_.UnitInfo().GetUnitInfoMap(sc2::Unit::Alliance::Self);
-
-    ss << "Workers: " << ui.size() << std::endl;
-
-    int yspace = 0;
 
     for (auto const & unit_info : ui )
     {

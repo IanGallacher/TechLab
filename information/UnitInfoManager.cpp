@@ -1,10 +1,12 @@
 #include <sstream>
 
-#include "information/UnitInfoManager.h"
-#include "util/Util.h"
+#include "TechLab/information/BaseLocationManager.h"
+#include "TechLab/information/UnitInfoManager.h"
+#include "TechLab/util/Util.h"
 
-UnitInfoManager::UnitInfoManager(sc2::Agent & bot)
+UnitInfoManager::UnitInfoManager(sc2::Agent & bot, const BaseLocationManager & base_location_manager)
     : bot_(bot)
+    , bases_(base_location_manager)
 {
 
 }
@@ -116,7 +118,7 @@ void UnitInfoManager::SetJob(const sc2::Unit* unit, const UnitMission job, const
 {
     if (job == UnitMission::Minerals && !mission_target)
     {
-        mission_target = GetClosestBase(unit, sc2::Unit::Alliance::Self);
+        mission_target = bases_.WhereToMineNext();
     }
     else if (job == UnitMission::Gas && !mission_target)
     {

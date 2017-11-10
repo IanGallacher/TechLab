@@ -2,7 +2,7 @@
 #include <vector>
 #include <sc2api/sc2_api.h>
 
-#include "util/DistanceMap.h"
+#include "TechLab/util/DistanceMap.h"
 
 class InformationManager;
 

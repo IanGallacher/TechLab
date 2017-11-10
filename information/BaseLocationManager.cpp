@@ -1,8 +1,9 @@
 #include "ByunJRBot.h"
-#include "common/Common.h"
-#include "information/BaseLocationManager.h"
-#include "util/Util.h"
+#include "TechLab/information/BaseLocationManager.h"
+#include "TechLab/util/Util.h"
  
+#include "common/Common.h"
+
 BaseLocationManager::BaseLocationManager(sc2::Agent & bot, const MapTools & map)
     : bot_(bot)
     , map_(map)
@@ -141,6 +142,10 @@ void BaseLocationManager::OnFrame(InformationManager & info)
         if (base_location != nullptr)
         {
             base_location->SetPlayerOccupying(Util::GetPlayer(unit), true);
+            if (Util::IsTownHall(unit))
+            {
+                base_location->SetTownHall(unit);
+            }
         }
     }
 
@@ -293,4 +298,29 @@ sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance pla
     }
 
     return closest_base ? closest_base->GetTownHallPosition() : sc2::Point2D(0.0f, 0.0f);
+}
+
+const sc2::Unit* BaseLocationManager::WhereToMineNext() const
+{
+    const BaseLocation* best_base = nullptr;
+
+    for (const BaseLocation* base : base_locations_)
+    {
+        // No need to keep checking logic if the base is not ours. 
+        if (base->IsOccupiedByPlayer(sc2::Unit::Alliance::Self))
+        {
+            // If we don't yet have an ideal base to mine from, or we found a better base.
+            if (
+                !best_base ||
+                base->GetTownHall() != nullptr
+                && base->TotalWorkersMining() < best_base->TotalWorkersMining()
+                )
+            {
+                best_base = base;
+            }
+        }
+    }
+    if(best_base)
+        return best_base->GetTownHall();
+    return nullptr;
 }

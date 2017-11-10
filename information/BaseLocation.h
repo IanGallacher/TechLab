@@ -9,6 +9,7 @@ class BaseLocation
 
     sc2::Point2D                             depot_position_;
     sc2::Point2D                             center_of_resources_;
+    const sc2::Unit*                         town_hall_ = nullptr;
     std::vector<const sc2::Unit*>            geysers_;
     std::vector<const sc2::Unit*>            minerals_;
 
@@ -23,6 +24,14 @@ class BaseLocation
     
 public:
     BaseLocation(sc2::Agent & bot, const std::vector<const sc2::Unit*> & resources);
+
+    const sc2::Unit * GetTownHall() const;
+    const sc2::Point2D & GetTownHallPosition() const;
+    const sc2::Point2D & GetPosition() const;
+    const std::vector<const sc2::Unit*>& GetGeysers() const;
+    const std::vector<const sc2::Unit*>& GetMinerals() const;
+
+    void SetTownHall(const sc2::Unit * unit);
     
     int GetGroundDistance(const sc2::Point2D & pos) const;
     bool IsStartLocation() const;
@@ -30,10 +39,7 @@ public:
     bool IsPotentialEnemyStartLocation() const;
     bool IsMineralOnly() const;
     bool ContainsPosition(const sc2::Point2D & pos) const;
-    const sc2::Point2D & GetTownHallPosition() const;
-    const sc2::Point2D & GetPosition() const;
-    const std::vector<const sc2::Unit*>& GetGeysers() const;
-    const std::vector<const sc2::Unit*>& GetMinerals() const;
+    const int TotalWorkersMining() const;
     bool IsOccupiedByPlayer(sc2::Unit::Alliance player) const;
     bool IsExplored() const;
     bool IsInResourceBox(int x, int y) const;

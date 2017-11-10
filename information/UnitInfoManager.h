@@ -1,11 +1,12 @@
 #pragma once
 #include <sc2api/sc2_api.h>
 
-#include "information/UnitData.h"
+#include "TechLab/information/UnitData.h"
 
 class UnitInfoManager 
 {
-    sc2::Agent &            bot_;
+    sc2::Agent &            bot_; 
+    const BaseLocationManager & bases_;
 
     std::map<sc2::Unit::Alliance, UnitData> unit_data_;
 
@@ -17,7 +18,7 @@ class UnitInfoManager
     const UnitData &        GetUnitData(sc2::Unit::Alliance player) const;
 
 public:
-    UnitInfoManager(sc2::Agent & bot);
+    UnitInfoManager(sc2::Agent & bot, const BaseLocationManager & bases_);
 
     void                    OnStart();
     void                    OnFrame();

@@ -1,6 +1,6 @@
 #include "ByunJRBot.h"
-#include "information/UnitData.h"
-#include "util/Util.h"
+#include "TechLab/information/UnitData.h"
+#include "TechLab/util/Util.h"
 
 UnitData::UnitData()
     : minerals_lost_(0)
@@ -167,7 +167,6 @@ void UnitData::SetJob(const sc2::Unit* unit, const UnitMission job, const sc2::U
 
         // Well, it looks like everything is alls et. Time to assign the worker to the refinery.
         worker_refinery_map_[unit->tag] = unit;
-        ui.missionTarget = mission_target;
     }
     else if (job == UnitMission::Attack)
     {
@@ -180,9 +179,9 @@ void UnitData::SetJob(const sc2::Unit* unit, const UnitMission job, const sc2::U
     else if (job == UnitMission::Repair)
     {
         unit_repair_chart_[mission_target->tag]++;
-        ui.missionTarget = mission_target;
     }
 
+    ui.missionTarget = mission_target;
     ui.mission = job;
 }
 

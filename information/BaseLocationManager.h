@@ -1,8 +1,8 @@
 #pragma once
 #include <sc2api/sc2_api.h>
 
-#include "information/BaseLocation.h"
-#include "information/MapTools.h"
+#include "TechLab/information/BaseLocation.h"
+#include "TechLab/information/MapTools.h"
 
 class InformationManager;
 
@@ -36,4 +36,5 @@ public:
     const BaseLocation* GetPlayerStartingBaseLocation(sc2::Unit::Alliance player) const;
     
     sc2::Point2D GetNextExpansion(sc2::Unit::Alliance player) const;
+    const sc2::Unit* WhereToMineNext() const;
 };

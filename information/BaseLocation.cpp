@@ -1,8 +1,8 @@
 #include <sstream>
 
 #include "ByunJRBot.h"
-#include "information/BaseLocation.h"
-#include "util/Util.h"
+#include "TechLab/information/BaseLocation.h"
+#include "TechLab/util/Util.h"
 
 const int NearBaseLocationTileDistance = 5;
 
@@ -92,10 +92,37 @@ BaseLocation::BaseLocation(sc2::Agent & bot, const std::vector<const sc2::Unit*>
     //}
 }
 
-// TODO: Calculate the actual town hall position.
+const sc2::Unit* BaseLocation::GetTownHall() const
+{
+    return town_hall_;
+}
+
 const sc2::Point2D & BaseLocation::GetTownHallPosition() const
 {
-    return GetPosition();
+    if (town_hall_)
+        return town_hall_->pos;
+    else
+        return GetPosition();
+}
+
+const std::vector<const sc2::Unit*>& BaseLocation::GetGeysers() const
+{
+    return geysers_;
+}
+
+const std::vector<const sc2::Unit*>& BaseLocation::GetMinerals() const
+{
+    return minerals_;
+}
+
+const sc2::Point2D & BaseLocation::GetPosition() const
+{
+    return center_of_resources_;
+}
+
+void BaseLocation::SetTownHall(const sc2::Unit* unit)
+{
+    town_hall_ = unit;
 }
 
 void BaseLocation::SetPlayerOccupying(const sc2::Unit::Alliance player, const bool occupying)
@@ -148,19 +175,12 @@ bool BaseLocation::ContainsPosition(const sc2::Point2D & pos) const
     return GetGroundDistance(pos) < NearBaseLocationTileDistance;
 }
 
-const std::vector<const sc2::Unit*>& BaseLocation::GetGeysers() const
+const int BaseLocation::TotalWorkersMining() const
 {
-    return geysers_;
-}
-
-const std::vector<const sc2::Unit*>& BaseLocation::GetMinerals() const
-{
-    return minerals_;
-}
-
-const sc2::Point2D & BaseLocation::GetPosition() const
-{
-    return center_of_resources_;
+    if(town_hall_)
+        return town_hall_->assigned_harvesters;
+    // No base exists, therefore no workers are mining
+    return -1;
 }
 
 int BaseLocation::GetGroundDistance(const sc2::Point2D & pos) const

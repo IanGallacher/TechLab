@@ -9,7 +9,7 @@ InformationManager::InformationManager(sc2::Agent & bot)
     // map_ must be be before bases_ in order to satisfy dependancies.
     , map_(bot, *this)
     , bases_(bot, map_)
-    , unit_info_(bot)
+    , unit_info_(bot, bases_)
 {
 
 }
