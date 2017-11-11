@@ -136,6 +136,12 @@ bool Util::IsIdle(const sc2::Unit* unit)
 
 int Util::GetUnitTypeMineralPrice(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
+    if (type == sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND)
+    {
+        // Internally the orbital command's mineral cost is 550.
+        // It only costs 150 to upgrade. 
+        return 150;
+    }
     return bot.Observation()->GetUnitTypeData()[type].mineral_cost;
 }
 
