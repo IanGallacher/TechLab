@@ -38,5 +38,6 @@ public:
     const sc2::Unit* GetClosestUnitWithJob(const sc2::Point2D point,
                                            const std::vector<UnitMission> mission_vector) const;
     const sc2::Unit* GetClosestUnitOfType(const sc2::Unit* unit, const sc2::UnitTypeID) const;
+    const sc2::Unit * GetClosestMineralField(const sc2::Unit * reference_unit) const;
     vvi GetDPSMap() const;
 };

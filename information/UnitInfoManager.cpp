@@ -38,14 +38,13 @@ void UnitInfoManager::UpdateUnitInfo()
 {
     units_[sc2::Unit::Alliance::Self].clear();
     units_[sc2::Unit::Alliance::Enemy].clear();
+    units_[sc2::Unit::Alliance::Neutral].clear();
+    units_[sc2::Unit::Alliance::Ally].clear();
 
     for (auto & unit : bot_.Observation()->GetUnits())
     {
-        if (Util::GetPlayer(unit) == sc2::Unit::Alliance::Self || Util::GetPlayer(unit) == sc2::Unit::Alliance::Enemy)
-        {
-            UpdateUnit(unit);
-            units_[Util::GetPlayer(unit)].push_back(unit);
-        }        
+        UpdateUnit(unit);
+        units_[Util::GetPlayer(unit)].push_back(unit);
     }
 }
 

@@ -240,6 +240,28 @@ const sc2::Unit* InformationManager::GetClosestUnitOfType(const sc2::Unit* refer
     return closest_unit;
 }
 
+
+const sc2::Unit* InformationManager::GetClosestMineralField(const sc2::Unit* reference_unit) const
+{
+    const sc2::Unit* closest_unit = nullptr;
+    double closest_distance = std::numeric_limits<double>::max();
+
+    for (auto unit : unit_info_.GetUnits(sc2::Unit::Alliance::Neutral))
+    {
+        if (unit->mineral_contents)
+        {
+            const double distance = Util::DistSq(unit->pos, reference_unit->pos);
+            if (!closest_unit || distance < closest_distance)
+            {
+                closest_unit = unit;
+                closest_distance = distance;
+            }
+        }
+    }
+
+    return closest_unit;
+}
+
 vvi InformationManager::GetDPSMap() const
 {
     return dps_map_;
