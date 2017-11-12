@@ -78,13 +78,13 @@ size_t UnitInfoManager::GetUnitTypeCount(const sc2::Unit::Alliance player, const
 
 size_t UnitInfoManager::GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const
 {
-    return GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::PROTOSS_NEXUS, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HATCHERY, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_LAIR, true)
-         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HIVE, true);
+    return GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::PROTOSS_NEXUS, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HATCHERY, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_LAIR, false)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HIVE, false);
 }
 
 void UnitInfoManager::DrawUnitInformation() const
@@ -135,7 +135,6 @@ void UnitInfoManager::SetJob(const sc2::Unit* unit, const UnitMission job, const
         mission_target = GetClosestNotSaturatedRefinery(unit);
     }
     unit_data_[Util::GetPlayer(unit)].SetJob(unit, job, mission_target);
-
 }
 
 // This can only return your workers, not the enemy workers. 
