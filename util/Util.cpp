@@ -134,6 +134,11 @@ bool Util::IsIdle(const sc2::Unit* unit)
     return unit->orders.empty();
 }
 
+sc2::UnitTypeData Util::GetUnitTypeData(const sc2::UnitTypeID type, const sc2::Agent & bot)
+{
+    return bot.Observation()->GetUnitTypeData()[type];
+}
+
 int Util::GetUnitTypeMineralPrice(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
     if (type == sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND)
@@ -159,7 +164,6 @@ int Util::GetUnitTypeHeight(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
     return static_cast<int>(2 * bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius);
 }
-
 
 sc2::Point2D Util::CalcCenterOfUnitGroup(const std::vector<const sc2::Unit*>& units)
 {

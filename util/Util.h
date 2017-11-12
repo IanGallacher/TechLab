@@ -30,6 +30,7 @@ namespace Util
     bool IsWorker(const sc2::Unit* unit);
     bool IsWorkerType(const sc2::UnitTypeID & unit);
     bool IsIdle(const sc2::Unit* unit);
+    sc2::UnitTypeData GetUnitTypeData(const sc2::UnitTypeID type, const sc2::Agent & bot);
     bool IsCompleted(const sc2::Unit* unit);
     float GetAttackRange(const sc2::UnitTypeID & type, sc2::Agent & bot);
     float GetAttackDamage(const sc2::UnitTypeID & type, sc2::Agent & bot);
