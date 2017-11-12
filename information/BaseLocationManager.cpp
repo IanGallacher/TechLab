@@ -46,7 +46,7 @@ void BaseLocationManager::OnStart()
             if (dist < cluster_distance)
             {
                 // Now do a more expensive ground distance check.
-                const float ground_dist = dist; //bot_.InformationManager().Map().getGroundDistance(mineral.pos, Util::CalcCenterOfUnitGroup(cluster));
+                const float ground_dist = dist; //bot_.Info().Map().getGroundDistance(mineral.pos, Util::CalcCenterOfUnitGroup(cluster));
                 if (ground_dist >= 0 && ground_dist < cluster_distance)
                 {
                     cluster.push_back(resource);

@@ -505,7 +505,7 @@ sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
 int Util::EnemyDPSInRange(const sc2::Point3D unit_pos, ByunJRBot & bot)
 {
     float total_dps = 0;
-    for (auto & enemyunit : bot.InformationManager().UnitInfo().GetUnits(sc2::Unit::Alliance::Enemy))
+    for (auto & enemyunit : bot.Info().UnitInfo().GetUnits(sc2::Unit::Alliance::Enemy))
     {
         double dist = Util::Dist(enemyunit->pos, unit_pos);
         double range = GetAttackRange(enemyunit->unit_type, bot);
