@@ -33,6 +33,7 @@ public:
     const std::vector<const BaseLocation*> & GetBaseLocations() const;
     const std::vector<const BaseLocation*> & GetStartingBaseLocations() const;
     const std::set<const BaseLocation*> & GetOccupiedBaseLocations(sc2::Unit::Alliance player) const;
+    int NumberOfControlledGeysers() const;
     const BaseLocation* GetPlayerStartingBaseLocation(sc2::Unit::Alliance player) const;
     
     sc2::Point2D GetNextExpansion(sc2::Unit::Alliance player) const;

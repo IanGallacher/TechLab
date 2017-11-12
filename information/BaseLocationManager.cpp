@@ -264,6 +264,16 @@ const std::set<const BaseLocation*> & BaseLocationManager::GetOccupiedBaseLocati
     return occupied_base_locations_.at(player);
 }
 
+int BaseLocationManager::NumberOfControlledGeysers() const
+{
+    int geyser_count = 0;
+    for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
+    {
+        geyser_count += base->GetGeysers().size();
+    }
+    return geyser_count;
+}
+
 sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance player) const
 {
     const BaseLocation* home_base = GetPlayerStartingBaseLocation(player);
