@@ -15,8 +15,8 @@ namespace Util
     };
 
     sc2::Unit::Alliance GetPlayer(const sc2::Unit* unit);
-    bool IsCombatUnit(const sc2::Unit* unit);
-    bool IsCombatUnitType(const sc2::UnitTypeID type);
+    bool IsCombatUnit(const sc2::Unit* unit, sc2::Agent & bot);
+    bool IsCombatUnitType(const sc2::UnitTypeID type, sc2::Agent & bot);
     bool IsSupplyProvider(const sc2::Unit* unit);
     bool IsSupplyProviderType(const sc2::UnitTypeID type);
     bool IsTownHall(const sc2::Unit* unit);

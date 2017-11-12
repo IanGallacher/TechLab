@@ -166,7 +166,7 @@ void UnitInfoManager::GetNearbyForce(std::vector<UnitInfo> & unit_info, sc2::Poi
 
         // if it's a combat unit we care about
         // and it's finished! 
-        if (Util::IsCombatUnitType(ui.type) && Util::Dist(ui.lastPosition,p) <= radius)
+        if (Util::IsCombatUnitType(ui.type, bot_) && Util::Dist(ui.lastPosition,p) <= radius)
         {
             // add it to the vector
             unit_info.push_back(ui);

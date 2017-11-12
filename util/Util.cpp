@@ -259,21 +259,21 @@ sc2::Unit::Alliance Util::GetPlayer(const sc2::Unit* unit)
     return sc2::Unit::Alliance(0);
 }
 
-bool Util::IsCombatUnitType(const sc2::UnitTypeID type)
+// Anything that can attack and is not a worker. 
+// This includes photon canons, turrets, etc.
+bool Util::IsCombatUnitType(const sc2::UnitTypeID type, sc2::Agent & bot)
 {
     if (IsWorkerType(type)) { return false; }
-    if (IsSupplyProviderType(type)) { return false; }
-    if (IsBuilding(type)) { return false; }
-
-    if (type == sc2::UNIT_TYPEID::ZERG_EGG) { return false; }
-    if (type == sc2::UNIT_TYPEID::ZERG_LARVA) { return false; }
+    if (GetAttackDamage(type, bot) == 0.0f) { return false; }
 
     return true;
 }
 
-bool Util::IsCombatUnit(const sc2::Unit* unit)
+// Anything that can attack and is not a worker. 
+// This includes photon canons, turrets, etc.
+bool Util::IsCombatUnit(const sc2::Unit* unit, sc2::Agent & bot)
 {
-    return IsCombatUnitType(unit->unit_type);
+    return IsCombatUnitType(unit->unit_type, bot);
 }
 
 bool Util::IsSupplyProviderType(const sc2::UnitTypeID type)
