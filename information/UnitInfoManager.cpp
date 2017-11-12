@@ -76,6 +76,17 @@ size_t UnitInfoManager::GetUnitTypeCount(const sc2::Unit::Alliance player, const
     return count;
 }
 
+size_t UnitInfoManager::GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const
+{
+    return GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_PLANETARYFORTRESS, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::PROTOSS_NEXUS, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HATCHERY, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_LAIR, true)
+         + GetUnitTypeCount(player, sc2::UNIT_TYPEID::ZERG_HIVE, true);
+}
+
 void UnitInfoManager::DrawUnitInformation() const
 {
     //if (!bot_.Config().DrawEnemyUnitInfo)
