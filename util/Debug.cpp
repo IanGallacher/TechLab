@@ -220,11 +220,7 @@ void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
     debug_txt += " (" + std::to_string(unit->unit_type) + ")";
 
     sc2::AvailableAbilities available_abilities = query->GetAbilitiesForUnit(unit);
-    if (available_abilities.abilities.size() < 1)
-    {
-        std::cout << "No abilities available for this unit" << std::endl;
-    }
-    else
+    if (available_abilities.abilities.size() >= 1)
     {
         for (const sc2::AvailableAbility & available_ability : available_abilities.abilities)
         {
