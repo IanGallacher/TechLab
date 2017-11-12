@@ -38,6 +38,7 @@ public:
     bool IsPlayerStartLocation() const;
     bool IsPotentialEnemyStartLocation() const;
     bool IsMineralOnly() const;
+    bool IsBaseFullySaturated() const;
     bool ContainsPosition(const sc2::Point2D & pos) const;
     const int TotalWorkersMining() const;
     bool IsOccupiedByPlayer(sc2::Unit::Alliance player) const;

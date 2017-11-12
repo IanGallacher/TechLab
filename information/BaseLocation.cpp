@@ -169,12 +169,20 @@ bool BaseLocation::IsMineralOnly() const
     return GetGeysers().empty();
 }
 
+bool BaseLocation::IsBaseFullySaturated() const
+{
+    if (town_hall_)
+        return town_hall_->assigned_harvesters >= town_hall_->ideal_harvesters;
+    return false;
+}
+
 // Warning: does not check to see if the tile is on the map. 
 bool BaseLocation::ContainsPosition(const sc2::Point2D & pos) const
 {
     return GetGroundDistance(pos) < NearBaseLocationTileDistance;
 }
 
+// Returns -1 if no workers are Mining.
 const int BaseLocation::TotalWorkersMining() const
 {
     if(town_hall_)

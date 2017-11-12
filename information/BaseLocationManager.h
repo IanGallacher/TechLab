@@ -36,5 +36,5 @@ public:
     const BaseLocation* GetPlayerStartingBaseLocation(sc2::Unit::Alliance player) const;
     
     sc2::Point2D GetNextExpansion(sc2::Unit::Alliance player) const;
-    const sc2::Unit* WhereToMineNext() const;
+    const sc2::Unit* WhereToMineNext(const sc2::Unit* worker) const;
 };

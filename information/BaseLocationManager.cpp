@@ -13,6 +13,7 @@ BaseLocationManager::BaseLocationManager(sc2::Agent & bot, const MapTools & map)
 
 void BaseLocationManager::OnStart()
 {
+#pragma region SetupVariables
     // Make a vector of vectors to represent the map.
     tile_base_locations_ = std::vector<std::vector<BaseLocation*>>(map_.TrueMapWidth(), std::vector<BaseLocation*>(map_.TrueMapHeight(), nullptr));
     player_starting_base_locations_[sc2::Unit::Alliance::Self]  = nullptr;
@@ -30,6 +31,7 @@ void BaseLocationManager::OnStart()
     // Stores each cluster of resources based on some ground distance.
     // These will be used to identify base locations.
     std::vector<std::vector<const sc2::Unit*>> resource_clusters;
+#pragma endregion
 
     // For every mineral field and gas geyser out there, add it to a resource cluster.
     for (auto resource : bot_.Observation()->GetUnits(sc2::Unit::Alliance::Neutral))
@@ -300,28 +302,52 @@ sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance pla
     return closest_base ? closest_base->GetTownHallPosition() : sc2::Point2D(0.0f, 0.0f);
 }
 
-const sc2::Unit* BaseLocationManager::WhereToMineNext() const
+// Find the closest not yet fully saturated base. 
+// If all our bases are fully saturated, return the closest one. 
+const sc2::Unit* BaseLocationManager::WhereToMineNext(const sc2::Unit* worker) const
 {
-    const BaseLocation* best_base = nullptr;
+    // The closest (ideally not fully saturated) base.
+    const BaseLocation* closest_base = nullptr;
+    double closest_distance = std::numeric_limits<double>::max();
 
     for (const BaseLocation* base : base_locations_)
     {
-        // No need to keep checking logic if the base is not ours. 
-        if (base->IsOccupiedByPlayer(sc2::Unit::Alliance::Self))
+        // Is this a better base location than the previous one found, if any?
+        if (
+            // There are three rules when deciding if we should use the newly found base instead of the old. 
+            // 1. The new base has to have a valid town center, owned by us.
+            base->GetTownHall() != nullptr
+            && base->IsOccupiedByPlayer(sc2::Unit::Alliance::Self)
+            && Util::IsCompleted(base->GetTownHall())
+
+            // 2. The newly found base must be "better or equal to" our previous best base.
+            //    The following rules establish if the base is better:
+            //   A. We always want to find a base to mine from, even if it is fully saturated. 
+            //       Therefore, if we have not yet found a base, that is the base we will mine from.
+            //       Additionally, if both this base and the previously found ideal base are saturated, 
+            //         go with the closest one. 
+            //   B. If the base is not yet fully saturated, we are free to send the worker there. 
+            && (
+                   !closest_base 
+                || (base->IsBaseFullySaturated() && closest_base->IsBaseFullySaturated()) 
+                || !base->IsBaseFullySaturated()
+               )
+            )
         {
-            // If we don't yet have an ideal base to mine from, or we found a better base.
-            if (
-                !best_base ||
-                base->GetTownHall() != nullptr
-                && Util::IsCompleted(base->GetTownHall())
-                && base->TotalWorkersMining() < best_base->TotalWorkersMining()
-                )
+            // Again, if we have not yet found the base, this base will have to do. 
+            if (!closest_base) { closest_base = base; continue; }
+
+            // 3. The new base is closer than the previous one. 
+            const double distance = Util::DistSq( closest_base->GetTownHallPosition(), base->GetTownHallPosition() );
+            if (distance < closest_distance)
             {
-                best_base = base;
+                closest_base = base;
+                closest_distance = distance;
             }
-        }
+        } // Welp, that was a ton of work. We finally found the best base for the input worker to mine from!
     }
-    if(best_base)
-        return best_base->GetTownHall();
+
+    if(closest_base)
+        return closest_base->GetTownHall();
     return nullptr;
 }

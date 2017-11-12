@@ -128,7 +128,7 @@ void UnitInfoManager::SetJob(const sc2::Unit* unit, const UnitMission job, const
 {
     if (job == UnitMission::Minerals && !mission_target)
     {
-        mission_target = bases_.WhereToMineNext();
+        mission_target = bases_.WhereToMineNext(unit);
     }
     else if (job == UnitMission::Gas && !mission_target)
     {
