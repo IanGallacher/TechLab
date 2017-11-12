@@ -313,6 +313,7 @@ const sc2::Unit* BaseLocationManager::WhereToMineNext() const
             if (
                 !best_base ||
                 base->GetTownHall() != nullptr
+                && Util::IsCompleted(base->GetTownHall())
                 && base->TotalWorkersMining() < best_base->TotalWorkersMining()
                 )
             {
