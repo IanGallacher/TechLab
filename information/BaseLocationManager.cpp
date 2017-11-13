@@ -227,6 +227,7 @@ void BaseLocationManager::OnFrame(InformationManager & info)
     {
         if (base_location.IsOccupiedByPlayer(sc2::Unit::Alliance::Self))
         {
+            base_location.GasIncome();
             occupied_base_locations_[sc2::Unit::Alliance::Self].insert(&base_location);
         }
 
@@ -272,6 +273,28 @@ int BaseLocationManager::NumberOfControlledGeysers() const
         geyser_count += base->GetGeysers().size();
     }
     return geyser_count;
+}
+
+// Provides a rough approximation of current mineral income. 
+int BaseLocationManager::MineralIncome() const
+{
+    int return_val = 0;
+    for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
+    {
+        return_val += base->MineralIncome();
+    }
+    return return_val;
+}
+
+// Provides a rough approximation of current gas income. 
+int BaseLocationManager::GasIncome() const
+{
+    int return_val = 0;
+    for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
+    {
+        return_val += base->GasIncome();
+    }
+    return return_val;
 }
 
 sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance player) const

@@ -40,7 +40,9 @@ public:
     bool IsMineralOnly() const;
     bool IsBaseFullySaturated() const;
     bool ContainsPosition(const sc2::Point2D & pos) const;
-    const int TotalWorkersMining() const;
+    int TotalWorkersMining() const;
+    int MineralIncome() const;
+    int GasIncome() const;
     bool IsOccupiedByPlayer(sc2::Unit::Alliance player) const;
     bool IsExplored() const;
     bool IsInResourceBox(int x, int y) const;

@@ -153,7 +153,7 @@ bool BaseLocation::IsExplored() const
 
 // IsPlayerStartLocation returns if you spawned at the given location. 
 // IsPlayerStartLocation.at(sc2::Unit::Alliance::Enemy) only gives POTENTIAL enemy spawn locations. 
-// For clarity, there is a seprate function for that. 
+// For clarity, there is a separate function for that. 
 bool BaseLocation::IsPlayerStartLocation() const
 {
     return is_player_start_location_.at(sc2::Unit::Alliance::Self);
@@ -183,12 +183,44 @@ bool BaseLocation::ContainsPosition(const sc2::Point2D & pos) const
 }
 
 // Returns -1 if no workers are Mining.
-const int BaseLocation::TotalWorkersMining() const
+int BaseLocation::TotalWorkersMining() const
 {
     if(town_hall_)
         return town_hall_->assigned_harvesters;
     // No base exists, therefore no workers are mining
     return -1;
+}
+
+// Provides a rough approximation of current mineral income. 
+int BaseLocation::MineralIncome() const
+{
+    // More accurate income can be calculated by knowing which minerals are currently being mined from.
+    // h is harvest time
+    // Mineral Harvest time = 2.786;
+    // Gas Harvest time = 1.9810
+    // t is travel time
+    // w is wait time (waiting at patch to be able to mine)
+    // worker acceleration = 2.5
+    // max worker speed = 2.813
+    // d = cc.pos + m.pos - cc.radius - m.radius - scv.diamater (the distance the scv would actually have to walk)
+    // vf = sqrt( 2 * a * d)
+    // t = 2*d / vf
+
+    // Gas / SCV - second = (60 / (h + t + w)) * 5
+    // if (harvest workers == max workers)
+    // Gas / second = 4 / x
+    return town_hall_->assigned_harvesters * 55;
+}
+
+// Provides a rough approximation of current gas income. 
+int BaseLocation::GasIncome() const
+{
+    int j = 0;
+    for (const auto & geyser : geysers_)
+    {
+        j += geyser->assigned_harvesters;
+    }
+    return j * 35;
 }
 
 int BaseLocation::GetGroundDistance(const sc2::Point2D & pos) const

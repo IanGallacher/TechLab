@@ -38,4 +38,7 @@ public:
     
     sc2::Point2D GetNextExpansion(sc2::Unit::Alliance player) const;
     const sc2::Unit* WhereToMineNext(const sc2::Unit* worker) const;
+
+    int MineralIncome() const;
+    int GasIncome() const;
 };
