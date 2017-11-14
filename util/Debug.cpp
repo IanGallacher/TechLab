@@ -55,7 +55,7 @@ void DebugManager::DrawMapSectors() const
             }
             std::stringstream ss;
             ss << information_manager_.Map().GetSectorNumber(x, y);
-            bot_.Debug()->DebugTextOut(ss.str(), sc2::Point3D(x + 0.5f, y + 0.5f, max_z_ + 0.1f), sc2::Colors::Yellow);
+            DrawText(sc2::Point3D(x + 0.5f, y + 0.5f, max_z_ + 0.1f), ss.str(), sc2::Colors::Yellow);
         }
     }
 }
@@ -231,7 +231,7 @@ void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
             debug_txt += GetAbilityText(ability.ability_id) + "\n";
         }
     }
-    bot_.Debug()->DebugTextOut(debug_txt, unit->pos, sc2::Colors::Green);
+    DrawText(unit->pos, debug_txt, sc2::Colors::Green);
 
     // Show the direction of the unit.
     sc2::Point3D p1; // Use this to show target distance.
@@ -300,7 +300,7 @@ void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
         sc2::Point3D p = target;
         p.z += 0.1f; // Raise the line off the ground a bit so it renders more clearly.
         bot_.Debug()->DebugSphereOut(target, 1.25f, sc2::Colors::Blue);
-        bot_.Debug()->DebugTextOut(target_info, p1, sc2::Colors::Yellow);
+        DrawText( p1, target_info, sc2::Colors::Yellow);
     }
 }
 
@@ -354,12 +354,12 @@ void DebugManager::DrawSphere(const float x, const float y, const float radius, 
 
 void DebugManager::DrawText(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color) const
 {
-    bot_.Debug()->DebugTextOut(str, sc2::Point3D(pos.x, pos.y, max_z_), color);
+    bot_.Debug()->DebugTextOut(str, sc2::Point3D(pos.x, pos.y, max_z_), color, 24);
 }
 
 void DebugManager::DrawTextScreen(const sc2::Point2D& pos, const std::string & str, const sc2::Color & color) const
 {
-    bot_.Debug()->DebugTextOut(str, pos, color);
+    bot_.Debug()->DebugTextOut(str, pos, color, 24);
 }
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2D unit_pos, const sc2::Color color) const
