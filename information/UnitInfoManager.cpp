@@ -191,7 +191,7 @@ const UnitData & UnitInfoManager::GetUnitData(const sc2::Unit::Alliance player) 
 }
 
 // getCombatUnits only has any meaning for your own units. 
-// unitData does not publicly expose this function to prevent accidental requsting of the set of enemy combat units. 
+// unitData does not publicly expose this function to prevent accidental requesting of the set of enemy combat units. 
 std::set<const UnitInfo*> UnitInfoManager::GetCombatUnits() const
 {
     return GetUnitData(sc2::Unit::Alliance::Self).GetCombatUnits();
