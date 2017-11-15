@@ -192,12 +192,13 @@ int BaseLocation::TotalWorkersMining() const
 }
 
 // Provides a rough approximation of current mineral income. 
-int BaseLocation::MineralIncome() const
+float BaseLocation::MineralIncomePerSecond() const
 {
     // More accurate income can be calculated by knowing which minerals are currently being mined from.
     // h is harvest time
     // Mineral Harvest time = 2.786;
     // Gas Harvest time = 1.9810
+    // mineralspertrip = 5
     // t is travel time
     // w is wait time (waiting at patch to be able to mine)
     // worker acceleration = 2.5
@@ -206,21 +207,27 @@ int BaseLocation::MineralIncome() const
     // vf = sqrt( 2 * a * d)
     // t = 2*d / vf
 
-    // Gas / SCV - second = (60 / (h + t + w)) * 5
+    // The mineral income equation is something like this
+    // Minerals per scv per second = mineralspertrip / (h + t + w) 
     // if (harvest workers == max workers)
-    // Gas / second = 4 / x
-    return town_hall_->assigned_harvesters * 55;
+    // Minerals per scv per second = mineralspertrip / h
+
+    // For now, we will use a simplified version of the equation.
+    // A worker will on average return 55 minerals per minute
+    // 55/60 = 0.91666 = minerals per second per harvester. 
+    return town_hall_->assigned_harvesters * 0.91666;
 }
 
 // Provides a rough approximation of current gas income. 
-int BaseLocation::GasIncome() const
+float BaseLocation::GasIncomePerSecond() const
 {
     int j = 0;
     for (const auto & geyser : geysers_)
     {
         j += geyser->assigned_harvesters;
     }
-    return j * 35;
+    // 35/60 to get harester income rate. 
+    return j * 0.58333;
 }
 
 int BaseLocation::GetGroundDistance(const sc2::Point2D & pos) const
