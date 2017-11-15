@@ -262,6 +262,19 @@ const sc2::Unit* InformationManager::GetClosestMineralField(const sc2::Unit* ref
     return closest_unit;
 }
 
+const sc2::Unit* InformationManager::FindNeutralUnitAtPosition(const sc2::Point2DI point) const
+{
+    for (const auto unit : unit_info_.GetUnits(sc2::Unit::Alliance::Neutral))
+    {
+        if (sc2::Point2DI(static_cast<float>(unit->pos.x),
+            static_cast<float>(unit->pos.y)) == point)
+        {
+            return unit;
+        }
+    }
+    return nullptr;
+}
+
 vvi InformationManager::GetDPSMap() const
 {
     return dps_map_;

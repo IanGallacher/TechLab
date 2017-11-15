@@ -39,5 +39,6 @@ public:
                                            const std::vector<UnitMission> mission_vector) const;
     const sc2::Unit* GetClosestUnitOfType(const sc2::Unit* unit, const sc2::UnitTypeID) const;
     const sc2::Unit * GetClosestMineralField(const sc2::Unit * reference_unit) const;
+    const sc2::Unit* FindNeutralUnitAtPosition(const sc2::Point2DI) const;
     vvi GetDPSMap() const;
 };
