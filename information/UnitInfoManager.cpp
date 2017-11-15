@@ -67,7 +67,7 @@ size_t UnitInfoManager::GetUnitTypeCount(const sc2::Unit::Alliance player, const
 
     for (auto & unit : GetUnits(player))
     {
-        if ((!type || type == unit->unit_type) && (include_incomplete_buildings || unit->build_progress == 1.0f))
+        if ( (!type || Util::IsUnitOfType(unit, type, bot_)) && (include_incomplete_buildings || unit->build_progress == 1.0f) )
         {
             count++;
         }

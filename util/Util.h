@@ -40,6 +40,7 @@ namespace Util
     int EnemyDPSInRange(const sc2::Point3D unit_pos, ByunJRBot & bot);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const sc2::Agent & bot);
     int GetUnitTypeHeight(const sc2::UnitTypeID type, const sc2::Agent & bot);
+    bool IsUnitOfType(const sc2::Unit * unit, sc2::UnitTypeID unit_type, const sc2::Agent & bot);
     int GetUnitTypeMineralPrice(const sc2::UnitTypeID type, const sc2::Agent & bot);
     int GetUnitTypeGasPrice(const sc2::UnitTypeID type, const sc2::Agent & bot);
     sc2::UnitTypeID GetTownHall(const sc2::Race & race);

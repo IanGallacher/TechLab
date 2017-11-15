@@ -165,6 +165,15 @@ int Util::GetUnitTypeHeight(const sc2::UnitTypeID type, const sc2::Agent & bot)
     return static_cast<int>(2 * bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius);
 }
 
+bool Util::IsUnitOfType(const sc2::Unit* unit, sc2::UnitTypeID unit_type, const sc2::Agent & bot)
+{
+    if (unit_type == bot.Observation()->GetUnitTypeData()[unit_type].unit_alias)
+        return true;
+    if (unit_type == bot.Observation()->GetUnitTypeData()[unit->unit_type].unit_alias)
+        return true;
+    return unit_type == unit->unit_type;
+}
+
 sc2::Point2D Util::CalcCenterOfUnitGroup(const std::vector<const sc2::Unit*>& units)
 {
     if (units.empty())
