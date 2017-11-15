@@ -23,7 +23,7 @@ public:
     // Debug Helper functions
     void DrawLine(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
     void DrawLine(const sc2::Point2D& min, const sc2::Point2D max, const sc2::Color& color = sc2::Colors::White) const;
-    void DrawSquareOnMap(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
+    void DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBox(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBox(const sc2::Point3D& min, const sc2::Point2D max, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBox(const sc2::Point3D& min, const sc2::Point3D max, const sc2::Color& color) const;
@@ -32,6 +32,7 @@ public:
     void DrawText(const sc2::Point2D& pos, const std::string& str, const sc2::Color& color = sc2::Colors::White) const;
     void DrawTextScreen(const sc2::Point2D& pos, const std::string& str, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2D unit_pos, const sc2::Color color = sc2::Colors::White) const;
+    void DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2DI unit_pos, const sc2::Color color) const;
     void DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point3D unit_pos, const sc2::Color color = sc2::Colors::White) const;
     void DrawBoxAroundUnit(const sc2::Unit* unit, const sc2::Color color) const;
     void DrawSphereAroundUnit(const sc2::Unit* uinit, sc2::Color color) const;
