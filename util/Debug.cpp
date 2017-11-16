@@ -13,7 +13,7 @@ DebugManager::DebugManager(sc2::Agent & bot, InformationManager & information_ma
 {
 }
 
-void DebugManager::DrawResourceDebugInfo() const
+void DebugManager::DrawUnitMissionOnUnit() const
 {
     const std::map<sc2::Tag, UnitInfo> ui = information_manager_.UnitInfo().GetUnitInfoMap(sc2::Unit::Alliance::Self);
 
