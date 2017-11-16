@@ -30,7 +30,6 @@ void DebugManager::DrawUnitMissionOnUnit() const
     }
 }
 
-
 void DebugManager::DrawEnemyDPSMap(std::vector<std::vector<int>> dps_map) const
 {
     for(int y = 0; y < dps_map.size(); ++y)
@@ -73,7 +72,6 @@ void DebugManager::DrawBaseLocations() const
     DrawSphere(next_expansion_position, 1, sc2::Colors::Purple);
     DrawText(next_expansion_position, "Next Expansion Location", sc2::Colors::Purple);
 }
-
 
 void DebugManager::DrawBaseLocation(const BaseLocation & base_location) const 
 {
@@ -206,7 +204,7 @@ std::string GetAbilityText(const sc2::AbilityID ability_id) {
 
 void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
 {
-    if (!unit) { return; }
+    if (!unit) return;
 
     auto query = bot_.Query();
     auto abilities = bot_.Observation()->GetAbilityData();
@@ -304,6 +302,25 @@ void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
     }
 }
 
+void DebugManager::AddToSidebar(std::string text, sc2::Color color)
+{
+    sidebar_info_.push_back( SidebarSegment{ text, color } );
+}
+
+void DebugManager::DrawSidebar()
+{
+    std::stringstream ss;
+
+    for (SidebarSegment sidebar_seg : sidebar_info_)
+    {
+        ss << sidebar_seg.sidebar_text;
+        ss << "\n\n\n";
+    }
+    DrawTextScreen(sc2::Point2D(0.01f, 0.01f), ss.str(), sc2::Colors::Yellow);
+    
+    sidebar_info_.clear();
+}
+
 void DebugManager::DrawLine(const float x1, const float y1, const float x2, const float y2, const sc2::Color & color) const
 {
     bot_.Debug()->DebugLineOut(sc2::Point3D(x1, y1, max_z_ + 0.2f), sc2::Point3D(x2, y2, max_z_ + 0.2f), color);
@@ -314,6 +331,7 @@ void DebugManager::DrawLine(const sc2::Point2D & min, const sc2::Point2D max, co
     bot_.Debug()->DebugLineOut(sc2::Point3D(min.x, min.y, max_z_ + 0.2f), sc2::Point3D(max.x, max.y, max_z_ + 0.2f), color);
 }
 
+#pragma region LowLevelPrivateFunctions
 void DebugManager::DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color & color) const
 {
     // Add 0.5f to make sure the z coordinate does not intersect with the terrain.
@@ -419,3 +437,4 @@ void DebugManager::DrawSphereAroundUnit(const sc2::Unit* unit, const sc2::Color 
 
     DrawSphere(unit->pos, unit->radius, color);
 }
+#pragma endregion

@@ -1,11 +1,19 @@
 #pragma once
 #include "TechLab/InformationManager.h"
 
+struct SidebarSegment
+{
+    std::string sidebar_text;
+    sc2::Color sidebar_color;
+};
+
 class DebugManager
 {
     // Debug functions require mutable agents.
     sc2::Agent & bot_;
     InformationManager & information_manager_;
+    std::vector<SidebarSegment> sidebar_info_;
+
 public:
     DebugManager(sc2::Agent & bot, InformationManager & information_manager);
     void DrawUnitMissionOnUnit() const;
@@ -19,10 +27,14 @@ public:
     void DrawAllSelectedUnitsDebugInfo() const;
     void DrawUnitDebugInfo(const sc2::Unit * unit) const;
 
+    void AddToSidebar(std::string text, sc2::Color color = sc2::Colors::White);
+    void DrawSidebar();
 
-    // Debug Helper functions
     void DrawLine(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
     void DrawLine(const sc2::Point2D& min, const sc2::Point2D max, const sc2::Color& color = sc2::Colors::White) const;
+
+
+    // Debug Helper low level functions 
     void DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBox(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
     void DrawBox(const sc2::Point3D& min, const sc2::Point2D max, const sc2::Color& color = sc2::Colors::White) const;
