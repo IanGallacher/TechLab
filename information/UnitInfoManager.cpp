@@ -206,8 +206,7 @@ int UnitInfoManager::GetNumRepairWorkers(const sc2::Unit* unit) const
 // This gets the total number you have, regardless if they are raised or lower. 
 int UnitInfoManager::GetNumDepots(sc2::Unit::Alliance self) const
 {
-    return GetUnitTypeCount(sc2::Unit::Alliance::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT)
-         + GetUnitTypeCount(sc2::Unit::Alliance::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOTLOWERED);
+    return GetUnitTypeCount(sc2::Unit::Alliance::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT);
 }
 // Does not look for flying bases. Only landed bases. 
 const sc2::Unit* UnitInfoManager::GetClosestBase(const sc2::Unit* reference_unit, sc2::Unit::Alliance base_owner) const
