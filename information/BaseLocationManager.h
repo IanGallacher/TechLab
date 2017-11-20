@@ -31,6 +31,7 @@ public:
     void OnFrame(InformationManager & info);
 
     const std::vector<const BaseLocation*> & GetBaseLocations() const;
+    const BaseLocation* BaseLocationManager::GetBaseAtLocation(const int x, const int y) const;
     const std::vector<const BaseLocation*> & GetStartingBaseLocations() const;
     const std::set<const BaseLocation*> & GetOccupiedBaseLocations(sc2::Unit::Alliance player) const;
     int NumberOfControlledGeysers() const;

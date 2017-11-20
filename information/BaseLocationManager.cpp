@@ -7,9 +7,7 @@
 BaseLocationManager::BaseLocationManager(sc2::Agent & bot, const MapTools & map)
     : bot_(bot)
     , map_(map)
-{
-    
-}
+{ }
 
 void BaseLocationManager::OnStart()
 {
@@ -248,6 +246,15 @@ BaseLocation* BaseLocationManager::GetBaseLocation(const sc2::Point2D & pos) con
 const std::vector<const BaseLocation*> & BaseLocationManager::GetBaseLocations() const
 {
     return base_locations_;
+}
+
+const BaseLocation* BaseLocationManager::GetBaseAtLocation(const int x, const int y) const
+{
+    for (const BaseLocation* base : base_locations_)
+    {
+        if (base->IsInResourceBox(x, y)) return base;
+    }
+    return nullptr;
 }
 
 const std::vector<const BaseLocation*> & BaseLocationManager::GetStartingBaseLocations() const

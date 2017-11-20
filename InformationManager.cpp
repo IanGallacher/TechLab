@@ -10,9 +10,7 @@ InformationManager::InformationManager(sc2::Agent & bot)
     , map_(bot, *this)
     , bases_(bot, map_)
     , unit_info_(bot, bases_)
-{
-
-}
+{ }
 
 void InformationManager::OnStart()
 {
