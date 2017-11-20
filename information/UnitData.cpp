@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TechLab/information/UnitData.h"
 #include "TechLab/util/Util.h"
 

@@ -33,7 +33,7 @@ void InformationManager::OnStart()
             player_race_[sc2::Unit::Alliance::Enemy] = player_info.race_requested;
         }
     }
-    dps_map_ = vvi{};
+    dps_map_ = std::vector<std::vector<int>>{};
     dps_map_.clear();
     for (int y = 0; y < map_.TrueMapHeight(); ++y)
     {
@@ -79,7 +79,7 @@ void InformationManager::OnFrame()
     {
         const int damage = Util::GetAttackDamage(unit->unit_type, bot_);
         if (damage == 0) continue;
-        int range = Util::GetAttackRange(unit->unit_type, bot_);
+        int range = Util::GetAttackRange(unit->unit_type, bot_) +1;
         //  Melee units are dangerous too.
         if (range == 0 && !Util::IsBuilding(unit->unit_type)) range = 2;
 
@@ -275,7 +275,7 @@ const sc2::Unit* InformationManager::FindNeutralUnitAtPosition(const sc2::Point2
     return nullptr;
 }
 
-vvi InformationManager::GetDPSMap() const
+std::vector<std::vector<int>> InformationManager::GetDPSMap() const
 {
     return dps_map_;
 }

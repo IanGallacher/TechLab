@@ -36,12 +36,12 @@ void MapTools::OnStart()
     assert(playable_map_height_ != 0, "Play area height is zero!");
 
 
-    walkable_        = vvb(true_map_width_, std::vector<bool>(true_map_height_, true));
-    buildable_       = vvb(true_map_width_, std::vector<bool>(true_map_height_, false));
-    depot_buildable_ = vvb(true_map_width_, std::vector<bool>(true_map_height_, false));
-    last_seen_       = vvi(true_map_width_, std::vector<int>(true_map_height_, 0));
-    sector_number_   = vvi(true_map_width_, std::vector<int>(true_map_height_, 0));
-    terrain_height_  = vvf(true_map_width_, std::vector<float>(true_map_height_, 0.0f));
+    walkable_        = std::vector<std::vector<bool>>(true_map_width_, std::vector<bool>(true_map_height_, true));
+    buildable_       = std::vector<std::vector<bool>>(true_map_width_, std::vector<bool>(true_map_height_, false));
+    depot_buildable_ = std::vector<std::vector<bool>>(true_map_width_, std::vector<bool>(true_map_height_, false));
+    last_seen_       = std::vector<std::vector<int>>(true_map_width_, std::vector<int>(true_map_height_, 0));
+    sector_number_   = std::vector<std::vector<int>>(true_map_width_, std::vector<int>(true_map_height_, 0));
+    terrain_height_  = std::vector<std::vector<float>>(true_map_width_, std::vector<float>(true_map_height_, 0.0f));
 
     // Set the boolean grid data from the Map
     for (size_t x(0); x < true_map_width_; ++x)

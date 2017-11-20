@@ -35,7 +35,7 @@ void DistanceMap::ComputeDistanceMap(const MapTools & map, const sc2::Point2DI &
     start_tile_ = start_tile;
     width_ = map.TrueMapWidth();
     height_ = map.TrueMapHeight();
-    dist_ = vvi (width_, std::vector<int>(height_, -1));
+    dist_ = std::vector<std::vector<int>> (width_, std::vector<int>(height_, -1));
     sorted_tile_positions_.reserve(width_ * height_);
 
     // The fringe for the BFS we will perform to calculate distances.

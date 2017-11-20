@@ -1,8 +1,8 @@
+#include <iostream>
+
 #include "ByunJRBot.h"
 #include "TechLab/information/BaseLocationManager.h"
 #include "TechLab/util/Util.h"
- 
-#include "common/Common.h"
 
 BaseLocationManager::BaseLocationManager(sc2::Agent & bot, const MapTools & map)
     : bot_(bot)

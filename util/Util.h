@@ -1,10 +1,6 @@
 #pragma once
 #include <sc2api/sc2_api.h>
 
-#include "common/Common.h"
-
-class ByunJRBot;
-
 namespace Util
 {
     struct IsUnit 

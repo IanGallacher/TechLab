@@ -517,7 +517,7 @@ int Util::DPSAtPoint(const sc2::Point2D unit_pos, const std::vector<const sc2::U
     for (auto & enemyunit : units)
     {
         double dist = Util::Dist(enemyunit->pos, unit_pos);
-        double range = GetAttackRange(enemyunit->unit_type, bot);
+        double range = GetAttackRange(enemyunit->unit_type, bot) + 1;
         // if we are in range, the dps that is coming at us increases.
         if (dist < range + 0.5f)
         {
@@ -534,7 +534,7 @@ int Util::DPSAtPoint(const sc2::Point3D unit_pos, const std::vector<const sc2::U
     for (auto & enemyunit : units)
     {
         double dist = Util::Dist(enemyunit->pos, unit_pos);
-        double range = GetAttackRange(enemyunit->unit_type, bot);
+        double range = GetAttackRange(enemyunit->unit_type, bot) + 1;
         // if we are in range, the dps that is coming at us increases.
         if (dist < range+0.5f)
         {
