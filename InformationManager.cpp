@@ -75,19 +75,20 @@ void InformationManager::OnFrame()
     }
 
     // Update dps_map_
-    for(const auto & unit : unit_info_.GetUnits(sc2::Unit::Alliance::Enemy))
+    for(const auto & unit_info_pair : unit_info_.GetUnitInfoMap(sc2::Unit::Alliance::Enemy))
     {
-        const int damage = Util::GetAttackDamage(unit->unit_type, bot_);
+        const auto unit_info = unit_info_pair.second;
+        const int damage = Util::GetAttackDamage(unit_info.type, bot_);
         if (damage == 0) continue;
-        int range = Util::GetAttackRange(unit->unit_type, bot_) +1;
+        int range = Util::GetAttackRange(unit_info.type, bot_) +1;
         //  Melee units are dangerous too.
-        if (range == 0 && !Util::IsBuilding(unit->unit_type)) range = 2;
+        if (range == 0 && !Util::IsBuilding(unit_info.type)) range = 2;
 
         for (int y = 0; y < dps_map_.size(); ++y)
         {
             for (int x = 0; x < dps_map_[y].size(); ++x)
             {
-                if( Util::DistSq(sc2::Point2D(x,y),unit->pos) <= (range*range) )
+                if( Util::DistSq(sc2::Point2D(x,y), unit_info.lastPosition) <= (range*range) )
                 {
                     dps_map_[y][x] += damage;
                 }
