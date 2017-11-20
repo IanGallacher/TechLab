@@ -1,5 +1,5 @@
 #pragma once
-#include "common/Common.h"
+#include <sc2api/sc2_api.h>
 
 class MapTools;
 
@@ -9,7 +9,7 @@ class DistanceMap
     int height_;
     sc2::Point2DI start_tile_;
 
-    vvi dist_;
+    std::vector<std::vector<int>> dist_;
     std::vector<sc2::Point2DI> sorted_tile_positions_;
     
 public:

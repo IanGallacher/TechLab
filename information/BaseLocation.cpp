@@ -1,6 +1,5 @@
 #include <sstream>
 
-#include "ByunJRBot.h"
 #include "TechLab/information/BaseLocation.h"
 #include "TechLab/util/Util.h"
 

@@ -2,11 +2,7 @@
 #include <sc2api/sc2_api.h>
 #include <sc2utils/sc2_manage_process.h>
 
-#include "ByunJRBot.h"
 #include "TechLab/util/Util.h"
-
-#include "common/BotAssert.h"
-
 Util::IsUnit::IsUnit(sc2::UNIT_TYPEID type) 
     : type(type) 
 {
@@ -198,7 +194,7 @@ bool Util::IsDetector(const sc2::Unit* unit)
     return IsDetectorType(unit->unit_type);
 }
 
-float Util::GetAttackRange(const sc2::UnitTypeID & type, sc2::Agent & bot)
+float Util::GetAttackRange(const sc2::UnitTypeID & type, const sc2::Agent & bot)
 {
     auto & weapons = bot.Observation()->GetUnitTypeData()[type].weapons;
     
@@ -219,7 +215,7 @@ float Util::GetAttackRange(const sc2::UnitTypeID & type, sc2::Agent & bot)
     return max_range;
 }
 
-float Util::GetAttackDamage(const sc2::UnitTypeID & type, sc2::Agent & bot)
+float Util::GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot)
 {
     auto & weapons = bot.Observation()->GetUnitTypeData()[type].weapons;
 
@@ -400,7 +396,7 @@ sc2::Race Util::GetRaceFromString(const std::string & race_in)
         return sc2::Race::Random;
     }
 
-    BOT_ASSERT(false, "Unknown Race: ", race.c_str());
+    assert(false, "Unknown Race: ", race.c_str());
     return sc2::Race::Terran;
 }
 
@@ -515,11 +511,10 @@ sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
     }
 }
 
-
-int Util::EnemyDPSInRange(const sc2::Point2D unit_pos, ByunJRBot & bot)
+int Util::DPSAtPoint(const sc2::Point2D unit_pos, const std::vector<const sc2::Unit*> & units, const sc2::Agent& bot)
 {
     float total_dps = 0;
-    for (auto & enemyunit : bot.Info().UnitInfo().GetUnits(sc2::Unit::Alliance::Enemy))
+    for (auto & enemyunit : units)
     {
         double dist = Util::Dist(enemyunit->pos, unit_pos);
         double range = GetAttackRange(enemyunit->unit_type, bot);
@@ -533,10 +528,10 @@ int Util::EnemyDPSInRange(const sc2::Point2D unit_pos, ByunJRBot & bot)
     return total_dps;
 }
 
-int Util::EnemyDPSInRange(const sc2::Point3D unit_pos, ByunJRBot & bot)
+int Util::DPSAtPoint(const sc2::Point3D unit_pos, const std::vector<const sc2::Unit*> & units, const sc2::Agent& bot)
 {
     float total_dps = 0;
-    for (auto & enemyunit : bot.Info().UnitInfo().GetUnits(sc2::Unit::Alliance::Enemy))
+    for (auto & enemyunit : units)
     {
         double dist = Util::Dist(enemyunit->pos, unit_pos);
         double range = GetAttackRange(enemyunit->unit_type, bot);

@@ -1,10 +1,8 @@
 #include <sstream>
 
-#include "ByunJRBot.h"
 #include "TechLab/util/DistanceMap.h"
 #include "TechLab/util/Util.h"
-
-#include "common/BotAssert.h"
+#include "TechLab/information/MapTools.h"
 
 const size_t LegalActions = 4;
 const int actionX[LegalActions] = {1, -1, 0, 0};
@@ -12,14 +10,11 @@ const int actionY[LegalActions] = {0, 0, 1, -1};
 
 // Only construct distance maps using MapTools.cpp
 // DistanceMaps won't change, and MapTools caches the results. 
-DistanceMap::DistanceMap() 
-{
-    
-}
+DistanceMap::DistanceMap() { }
 
 int DistanceMap::GetDistance(int tile_x, int tile_y) const
 { 
-    BOT_ASSERT(tile_x < width_ && tile_y < height_, "Index out of range: X = %d, Y = %d", tile_x, tile_y);
+    assert(tile_x < width_ && tile_y < height_, "Index out of range: X = %d, Y = %d", tile_x, tile_y);
     return dist_[tile_x][tile_y]; 
 }
 

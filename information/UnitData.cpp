@@ -1,4 +1,3 @@
-#include "ByunJRBot.h"
 #include "TechLab/information/UnitData.h"
 #include "TechLab/util/Util.h"
 
