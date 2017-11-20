@@ -153,12 +153,26 @@ int Util::GetUnitTypeGasPrice(const sc2::UnitTypeID type, const sc2::Agent & bot
 
 int Util::GetUnitTypeWidth(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
-    return static_cast<int>(2 * bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius);
+    float largest_radius = 0;
+    if (largest_radius < bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius)
+        largest_radius = bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius;
+
+    // OrbitalCommands have a footprint radius of 0.
+    // Get the CommandCenter, and use the larger footprint radius.
+    const auto tech_alias = bot.Observation()->GetUnitTypeData()[type].tech_alias;
+    // If the unit has no tech alias, simply use the radius that we have already found. 
+    if(tech_alias.size() == 0)
+        return static_cast<int>(2 * largest_radius);
+
+    if (largest_radius < bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(tech_alias[0])].footprint_radius)
+        largest_radius = bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(tech_alias[0])].footprint_radius;
+    return static_cast<int>(2 * largest_radius);
 }
 
 int Util::GetUnitTypeHeight(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
-    return static_cast<int>(2 * bot.Observation()->GetAbilityData()[UnitTypeIDToAbilityID(type)].footprint_radius);
+    // Units in sc2 are square. Both the width and the height are the same. 
+    return GetUnitTypeWidth(type, bot);
 }
 
 bool Util::IsUnitOfType(const sc2::Unit* unit, sc2::UnitTypeID unit_type, const sc2::Agent & bot)
