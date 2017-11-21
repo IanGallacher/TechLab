@@ -31,11 +31,11 @@ void InformationManager::OnStart()
             player_race_[sc2::Unit::Alliance::Enemy] = player_info.race_requested;
         }
     }
-    dps_map_ = std::vector<std::vector<int>>{};
+    dps_map_ = std::vector<std::vector<float>>{};
     dps_map_.clear();
     for (int y = 0; y < map_.TrueMapHeight(); ++y)
     {
-        dps_map_.push_back(std::vector<int>());
+        dps_map_.push_back(std::vector<float>());
         for (int x = 0; x < map_.TrueMapWidth(); ++x)
         {
             // There is an inherit "danger" for traveling through any square. 
@@ -86,9 +86,13 @@ void InformationManager::OnFrame()
         {
             for (int x = 0; x < dps_map_[y].size(); ++x)
             {
-                if( Util::DistSq(sc2::Point2D(x,y), unit_info.lastPosition) <= (range*range) )
+                for (float falloff = 0; falloff < 25; ++falloff)
                 {
-                    dps_map_[y][x] += damage;
+                    if (Util::DistSq(sc2::Point2D(x, y), unit_info.lastPosition) <= (range*range + falloff*falloff))
+                    {
+                        dps_map_[y][x] += static_cast<float>(damage)/( (falloff * 2) +1 );
+                        break;
+                    }
                 }
             }
         }
@@ -274,7 +278,7 @@ const sc2::Unit* InformationManager::FindNeutralUnitAtPosition(const sc2::Point2
     return nullptr;
 }
 
-std::vector<std::vector<int>> InformationManager::GetDPSMap() const
+std::vector<std::vector<float>> InformationManager::GetDPSMap() const
 {
     return dps_map_;
 }

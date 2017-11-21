@@ -17,7 +17,7 @@ class InformationManager
 
 
     std::map<sc2::Unit::Alliance, sc2::Race>   player_race_;
-    std::vector<std::vector<int>>   dps_map_;
+    std::vector<std::vector<float>>   dps_map_;
 
 public:
     InformationManager(sc2::Agent & bot);
@@ -40,5 +40,5 @@ public:
     const sc2::Unit* GetClosestUnitOfType(const sc2::Unit* unit, const sc2::UnitTypeID) const;
     const sc2::Unit * GetClosestMineralField(const sc2::Unit * reference_unit) const;
     const sc2::Unit* FindNeutralUnitAtPosition(const sc2::Point2DI) const;
-	std::vector<std::vector<int>> GetDPSMap() const;
+	std::vector<std::vector<float>> GetDPSMap() const;
 };

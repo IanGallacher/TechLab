@@ -6,7 +6,7 @@
 #include "TechLab/util/Util.h"
 
 
-float max_z_ = 11;
+float max_z_ = 13;
 
 DebugManager::DebugManager(sc2::Agent & bot, InformationManager & information_manager)
     : bot_(bot)
@@ -31,14 +31,14 @@ void DebugManager::DrawUnitMissionOnUnit() const
     }
 }
 
-void DebugManager::DrawEnemyDPSMap(std::vector<std::vector<int>> dps_map) const
+void DebugManager::DrawEnemyDPSMap(std::vector<std::vector<float>> dps_map) const
 {
     for(int y = 0; y < dps_map.size(); ++y)
     {
         for (int x = 0; x < dps_map[y].size(); ++x)
         {
-            if(dps_map[y][x] != 1)
-            DrawBox((float)x - 0.5, (float)y - 0.5, (float)x + 0.5, (float)y + 0.5);
+            if(dps_map[y][x] != 1 && dps_map[y][x] != 999)
+            DrawText(sc2::Point3D(x,y,max_z_), std::to_string(static_cast<int>(dps_map[y][x])));
         }
     }
 }

@@ -17,7 +17,7 @@ class DebugManager
 public:
     DebugManager(sc2::Agent & bot, InformationManager & information_manager);
     void DrawUnitMissionOnUnit() const;
-    void DrawEnemyDPSMap(std::vector<std::vector<int>> dps_map) const;
+    void DrawEnemyDPSMap(std::vector<std::vector<float>> dps_map) const;
     void DrawMapSectors() const;
     void DrawBaseLocations() const;
     void DrawBaseLocation(const BaseLocation & base_location) const;
