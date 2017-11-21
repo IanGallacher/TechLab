@@ -787,7 +787,8 @@ bool Util::IsBuilding(const sc2::UnitTypeID & type)
         case sc2::UNIT_TYPEID::TERRAN_STARPORT:         return true; 
         case sc2::UNIT_TYPEID::TERRAN_STARPORTREACTOR:  return true; 
         case sc2::UNIT_TYPEID::TERRAN_STARPORTTECHLAB:  return true; 
-        case sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT:      return true; 
+        case sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT:      return true;
+        case sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOTLOWERED:      return true;
         case sc2::UNIT_TYPEID::PROTOSS_TEMPLARARCHIVE:  return true; 
         case sc2::UNIT_TYPEID::PROTOSS_TWILIGHTCOUNCIL: return true; 
         case sc2::UNIT_TYPEID::ZERG_ULTRALISKCAVERN:    return true; 
