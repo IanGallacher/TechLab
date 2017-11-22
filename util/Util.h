@@ -28,13 +28,15 @@ namespace Util
     bool IsIdle(const sc2::Unit* unit);
     sc2::UnitTypeData GetUnitTypeData(const sc2::UnitTypeID type, const sc2::Agent & bot);
     bool IsCompleted(const sc2::Unit* unit);
+
     float GetAttackRange(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     float GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot);
+    float GetAttackRate(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & type, sc2::Agent & bot);
     sc2::UnitTypeID WhatBuilds(const sc2::UnitTypeID & type);
-	int DPSAtPoint(const sc2::Point2D unit_pos, const std::vector<const sc2::Unit*>& units, const sc2::Agent& bot);
-    int DPSAtPoint(const sc2::Point3D unit_pos, const std::vector<const sc2::Unit*>& units, const sc2::Agent& bot);
+	int DPSAtPoint(const sc2::Point2D unit_pos, const sc2::Agent& bot);
+    int PredictFutureDPSAtPoint(const sc2::Point2D unit_pos, const float future_time, const sc2::Agent & bot);
     int GetUnitTypeWidth(const sc2::UnitTypeID type, const sc2::Agent & bot);
     int GetUnitTypeHeight(const sc2::UnitTypeID type, const sc2::Agent & bot);
     bool IsUnitOfType(const sc2::Unit * unit, sc2::UnitTypeID unit_type, const sc2::Agent & bot);

@@ -88,11 +88,13 @@ void InformationManager::OnFrame()
             {
                 for (float falloff = 0; falloff < 25; ++falloff)
                 {
-                    if (Util::DistSq(sc2::Point2D(x, y), unit_info.lastPosition) <= (range*range + falloff*falloff))
-                    {
-                        dps_map_[y][x] += static_cast<float>(damage)/( (falloff * 2) +1 );
-                        break;
-                    }
+                    // Danger zone falloff only applies to army units. 
+                    if (!Util::IsWorker(unit_info.unit) && falloff > 1)
+                        if (Util::DistSq(sc2::Point2D(x, y), unit_info.lastPosition) <= (range*range + falloff*falloff))
+                        {
+                            dps_map_[y][x] += static_cast<float>(damage)/( (falloff * 2) +1 );
+                            break;
+                        }
                 }
             }
         }
