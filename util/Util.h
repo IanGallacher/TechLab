@@ -3,13 +3,6 @@
 
 namespace Util
 {
-    struct IsUnit 
-    {
-        sc2::UNIT_TYPEID type;
-
-        IsUnit(sc2::UNIT_TYPEID type);
-    };
-
     sc2::Unit::Alliance GetPlayer(const sc2::Unit* unit);
     bool IsCombatUnit(const sc2::Unit* unit, sc2::Agent & bot);
     bool IsCombatUnitType(const sc2::UnitTypeID type, sc2::Agent & bot);

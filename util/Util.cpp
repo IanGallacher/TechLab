@@ -3,10 +3,6 @@
 #include <sc2utils/sc2_manage_process.h>
 
 #include "TechLab/util/Util.h"
-Util::IsUnit::IsUnit(sc2::UNIT_TYPEID type) 
-    : type(type) 
-{
-}
 
 bool Util::IsTownHallType(const sc2::UnitTypeID & type)
 {
