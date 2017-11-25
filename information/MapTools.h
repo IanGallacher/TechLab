@@ -6,6 +6,15 @@
 
 class InformationManager;
 
+
+enum class MapTileType
+{
+	Free,
+	Ramp,
+	CantBuild,
+	CantWalk
+};
+
 class MapTools
 {
     sc2::Agent & bot_;
@@ -31,16 +40,6 @@ class MapTools
     void ComputeConnectivity();
         
     void PrintMap() const;
-
-
-    enum class MapTileType
-    {
-        Free,
-        Ramp,
-        CantBuild,
-        CantWalk
-    };
-
 
 public:
 

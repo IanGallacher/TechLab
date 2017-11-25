@@ -322,6 +322,11 @@ void DebugManager::DrawSidebar()
     sidebar_info_.clear();
 }
 
+void DebugManager::DrawPoint(const float x, const float y, const sc2::Color & color) const
+{
+	bot_.Debug()->DebugLineOut(sc2::Point3D(x, y, max_z_ + 0.2f), sc2::Point3D(x, y, 0), color);
+}
+
 void DebugManager::DrawLine(const float x1, const float y1, const float x2, const float y2, const sc2::Color & color) const
 {
     bot_.Debug()->DebugLineOut(sc2::Point3D(x1, y1, max_z_ + 0.2f), sc2::Point3D(x2, y2, max_z_ + 0.2f), color);
