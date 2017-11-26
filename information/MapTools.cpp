@@ -167,8 +167,8 @@ int MapTools::GetGroundDistance(const sc2::Point2DI& src, const sc2::Point2DI& d
 int MapTools::GetGroundDistance(const sc2::Point2D& src, const sc2::Point2D& dest) const
 {
     return GetGroundDistance(
-		Util::Point2Dto2DI(src),
-		Util::Point2Dto2DI(dest)
+		Util::ToPoint2DI(src),
+		Util::ToPoint2DI(dest)
     );
 }
 
@@ -319,7 +319,7 @@ int MapTools::PlayableMapHeight() const
 
 const std::vector<sc2::Point2DI>& MapTools::GetClosestTilesTo(const sc2::Point2D& pos) const
 {
-    return GetDistanceMap(Util::Point2Dto2DI(pos)).GetSortedTiles();
+    return GetDistanceMap(Util::ToPoint2DI(pos)).GetSortedTiles();
 }
 
 const std::vector<sc2::Point2DI>& MapTools::GetClosestTilesTo(const sc2::Point2DI& pos) const
@@ -481,7 +481,7 @@ sc2::Point2DI MapTools::GetNextCoordinateToWallWithBuilding(const sc2::UnitTypeI
                 // && ((y < 49 || y > 119) || TerrainHeight(x, y) < 10.5))
                 //    continue;
 
-                const sc2::Point2D point = Util::Point2DIto2D(tile);
+                const sc2::Point2D point = Util::ToPoint2D(tile);
                 const double distance = Util::DistSq(point, base_location);
                 if (distance < closest_distance)
                 {

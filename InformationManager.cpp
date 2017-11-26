@@ -270,7 +270,7 @@ const sc2::Unit* InformationManager::FindNeutralUnitAtPosition(const sc2::Point2
 {
     for (const auto unit : unit_info_.GetUnits(sc2::Unit::Alliance::Neutral))
     {
-        if (Util::Point2Dto2DI(unit->pos) == point)
+        if (Util::ToPoint2DI(unit->pos) == point)
         {
             return unit;
         }
