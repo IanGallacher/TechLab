@@ -33,7 +33,6 @@ public:
 
     void SetTownHall(const sc2::Unit * unit);
     
-    int GetGroundDistance(const sc2::Point2D & pos) const;
     bool IsStartLocation() const;
     bool IsPlayerStartLocation() const;
     bool IsPotentialEnemyStartLocation() const;

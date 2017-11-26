@@ -26,8 +26,8 @@ public:
 
     const std::vector<const sc2::Unit*>& GetUnits(sc2::Unit::Alliance player) const;
 
-    size_t                  GetUnitTypeCount(sc2::Unit::Alliance player, sc2::UnitTypeID type, bool include_incomplete_buildings = true) const;
-    size_t                  GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const;
+    int                     GetUnitTypeCount(sc2::Unit::Alliance player, sc2::UnitTypeID type, bool include_incomplete_buildings = true) const;
+    int                     GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const;
 
     void                    GetNearbyForce(std::vector<UnitInfo>& unit_info, sc2::Point2D p, sc2::Unit::Alliance player, float radius) const;
 

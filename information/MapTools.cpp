@@ -26,14 +26,14 @@ void MapTools::OnStart()
 {
     true_map_width_  = bot_.Observation()->GetGameInfo().width;
     true_map_height_ = bot_.Observation()->GetGameInfo().height;
-    assert(true_map_width_ != 0, "True map width is zero!");
-    assert(true_map_height_ != 0, "Play area height is zero!");
+	assert(true_map_width_ != 0);
+	assert(true_map_height_ != 0);
 
 
     playable_map_width_ = static_cast<int>(bot_.Observation()->GetGameInfo().playable_max.x - bot_.Observation()->GetGameInfo().playable_min.x);
     playable_map_height_ = static_cast<int>(bot_.Observation()->GetGameInfo().playable_max.y - bot_.Observation()->GetGameInfo().playable_min.y);
-    assert(playable_map_width_ != 0, "Play area with is zero!");
-    assert(playable_map_height_ != 0, "Play area height is zero!");
+    assert(playable_map_width_ != 0);
+    assert(playable_map_height_ != 0);
 
 
     walkable_        = std::vector<std::vector<bool>>(true_map_width_, std::vector<bool>(true_map_height_, true));
@@ -44,13 +44,14 @@ void MapTools::OnStart()
     terrain_height_  = std::vector<std::vector<float>>(true_map_width_, std::vector<float>(true_map_height_, 0.0f));
 
     // Set the boolean grid data from the Map
-    for (size_t x(0); x < true_map_width_; ++x)
+    for (int x=0; x < true_map_width_; ++x)
     {
-        for (size_t y(0); y < true_map_height_; ++y)
+        for (int y=0; y < true_map_height_; ++y)
         {
-            buildable_[x][y]        = Util::Placement(bot_.Observation()->GetGameInfo(), sc2::Point2D(x, y));
-            walkable_[x][y]         = buildable_[x][y] || Util::Pathable(bot_.Observation()->GetGameInfo(), sc2::Point2D(x, y));
-            terrain_height_[x][y]   = bot_.Observation()->TerrainHeight(sc2::Point2D(x, y));
+			const auto tile = sc2::Point2D{ static_cast<float>(x), static_cast<float>(y) };
+            buildable_[x][y]        = Util::Placement(bot_.Observation()->GetGameInfo(), tile);
+            walkable_[x][y]         = buildable_[x][y] || Util::Pathable(bot_.Observation()->GetGameInfo(), tile);
+            terrain_height_[x][y]   = bot_.Observation()->TerrainHeight(tile);
         }
     }
 
@@ -59,13 +60,13 @@ void MapTools::OnStart()
 
 void MapTools::OnFrame()
 {
-    frame_++;
+    ++frame_;
 
     for (int x=0; x<true_map_width_; ++x)
     {
         for (int y=0; y<true_map_height_; ++y)
         {
-            if (IsVisible(sc2::Point2D(x, y)))
+            if (IsVisible(sc2::Point2D{static_cast<float>(x), static_cast<float>(y)}))
             {
                 last_seen_[x][y] = frame_;
             }
@@ -86,17 +87,14 @@ void MapTools::ComputeConnectivity()
         for (int y=0; y<true_map_height_; ++y)
         {
             // if the sector is not currently 0, or the map isn't walkable here, then we can skip this tile
-            if (GetSectorNumber(x, y) != 0 || !IsWalkable(x, y))
-            {
-                continue;
-            }
+            if (GetSectorNumber(x, y) != 0 || !IsWalkable(x, y)) continue;
 
             // increase the sector number, so that walkable tiles have sectors 1-N
             sector_number++;
 
             // reset the fringe for the search and add the start tile to it
             fringe.clear();
-            fringe.push_back(sc2::Point2DI(x+0.5f, y+0.5f));
+            fringe.push_back(sc2::Point2DI{static_cast<int>(x+0.5f), static_cast<int>(y+0.5f)});
             sector_number_[x][y] = sector_number;
 
             // do the BFS, stopping when we reach the last element of the fringe
@@ -149,17 +147,19 @@ bool MapTools::IsPowered(const sc2::Point2DI& pos) const
     return false;
 }
 
+float MapTools::TerrainHeight(const int x, const int y) const
+{
+	return terrain_height_[x][y];
+}
+
 float MapTools::TerrainHeight(const float x, const float y) const
 {
-    return terrain_height_[x][y];
+    return TerrainHeight( static_cast<int>(x), static_cast<int>(y) );
 }
 
 int MapTools::GetGroundDistance(const sc2::Point2DI& src, const sc2::Point2DI& dest) const
 {
-    if (all_maps_.size() > 50)
-    {
-        all_maps_.clear();
-    }
+    if (all_maps_.size() > 50) { all_maps_.clear(); }
 
     return GetDistanceMap(dest).GetDistance(src);
 }
@@ -167,8 +167,8 @@ int MapTools::GetGroundDistance(const sc2::Point2DI& src, const sc2::Point2DI& d
 int MapTools::GetGroundDistance(const sc2::Point2D& src, const sc2::Point2D& dest) const
 {
     return GetGroundDistance(
-        sc2::Point2DI(static_cast<int>(src.x),  static_cast<int>(src.y)),
-        sc2::Point2DI(static_cast<int>(dest.x), static_cast<int>(dest.y))
+		Util::Point2Dto2DI(src),
+		Util::Point2Dto2DI(dest)
     );
 }
 
@@ -187,10 +187,7 @@ const DistanceMap& MapTools::GetDistanceMap(const sc2::Point2DI& tile) const
 
 int MapTools::GetSectorNumber(const int x, const int y) const
 {
-    if (!IsOnMap(x, y))
-    {
-        return 0;
-    }
+    if (!IsOnMap(x, y)) { return 0; }
 
     return sector_number_[x][y];
 }
@@ -209,7 +206,7 @@ bool MapTools::IsOnMap(const int x, const int y) const
 // Returns true if the point is on the map, and not just the playable portions of the map.
 bool MapTools::IsOnMap(const sc2::Point2D& pos) const
 {
-    return IsOnMap(pos.x, pos.y);
+    return IsOnMap(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }
 
 // Returns true if the point is on the map, and not just the playable portions of the map.
@@ -238,17 +235,14 @@ bool MapTools::IsConnected(const sc2::Point2DI& p1, const sc2::Point2DI& p2) con
 
 bool MapTools::IsBuildable(const int x, const int y) const
 {
-    if (!IsOnMap(x, y))
-    {
-        return false;
-    }
+    if (!IsOnMap(x, y)) { return false; }
 
     return buildable_[x][y];
 }
 
 bool MapTools::CanBuildTypeAtPosition(const int x, const int y, const sc2::UnitTypeID type) const
 {
-    return bot_.Query()->Placement(Util::UnitTypeIDToAbilityID(type), sc2::Point2D(static_cast<float>(x), static_cast<float>(y)));
+    return bot_.Query()->Placement(Util::UnitTypeIDToAbilityID(type), sc2::Point2D{static_cast<float>(x), static_cast<float>(y)});
 }
 
 bool MapTools::IsBuildable(const sc2::Point2DI& tile) const
@@ -277,19 +271,15 @@ void MapTools::PrintMap() const
 bool MapTools::IsDepotBuildableTile(const sc2::Point2D& tile) const
 {
     if (!IsOnMap(tile))
-    {
         return false;
-    }
 
-    return depot_buildable_[tile.x][tile.y];
+    return depot_buildable_[static_cast<int>(tile.x)][static_cast<int>(tile.y)];
 }
 
 bool MapTools::IsWalkable(const int x, const int y) const
 {
     if (!IsOnMap(x, y))
-    {
         return false;
-    }
 
     return walkable_[x][y];
 }
@@ -329,7 +319,7 @@ int MapTools::PlayableMapHeight() const
 
 const std::vector<sc2::Point2DI>& MapTools::GetClosestTilesTo(const sc2::Point2D& pos) const
 {
-    return GetDistanceMap(sc2::Point2DI(pos.x, pos.y)).GetSortedTiles();
+    return GetDistanceMap(Util::Point2Dto2DI(pos)).GetSortedTiles();
 }
 
 const std::vector<sc2::Point2DI>& MapTools::GetClosestTilesTo(const sc2::Point2DI& pos) const
@@ -344,7 +334,7 @@ sc2::Point2DI MapTools::GetLeastRecentlySeenPosition() const
     const BaseLocation* base_location = information_manager_.Bases().GetPlayerStartingBaseLocation(sc2::Unit::Alliance::Self);
     for ( const auto& tile : GetClosestTilesTo(base_location->GetPosition()) )
     {
-        assert(IsOnMap(tile), "How is this tile not valid?");
+        assert(IsOnMap(tile));
 
         const int last_seen = last_seen_[static_cast<int>(tile.x)][static_cast<int>(tile.y)];
         if (last_seen < min_seen)
@@ -443,7 +433,7 @@ bool MapTools::IsAnyTileAdjacentToTileType(const sc2::Point2DI p, const MapTileT
     {
         for (int y = starty; y < endy; ++y)
         {
-            if (IsTileAdjacentToTileType(sc2::Point2DI(x,y), tile_type))
+            if (IsTileAdjacentToTileType(sc2::Point2DI{x,y}, tile_type))
             {
                 return true;
             }
@@ -454,7 +444,7 @@ bool MapTools::IsAnyTileAdjacentToTileType(const sc2::Point2DI p, const MapTileT
 
 sc2::Point2DI MapTools::GetNextCoordinateToWallWithBuilding(const sc2::UnitTypeID building_type) const
 {
-    sc2::Point2D closest_point(0, 0);
+    sc2::Point2DI closest_tile{0, 0};
     double closest_distance = std::numeric_limits<double>::max();
 
     // Get the closest ramp to our starting base. 
@@ -468,19 +458,20 @@ sc2::Point2DI MapTools::GetNextCoordinateToWallWithBuilding(const sc2::UnitTypeI
     {
         for (int x = 2; x < (true_map_width_ - 2); ++x)
         {
+			const auto tile = sc2::Point2DI{x,y};
             // If we can walk on it, but not build on it, it is most likely a ramp.
             // TODO: That is not actually correct, come up with a beter way to detect ramps. 
-            if (IsAnyTileAdjacentToTileType(sc2::Point2DI(x,y),MapTileType::Ramp, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT)
-             && bot_.Query()->Placement(Util::UnitTypeIDToAbilityID(building_type), sc2::Point2D(static_cast<float>(x), static_cast<float>(y))))
+            if (IsAnyTileAdjacentToTileType(tile,MapTileType::Ramp, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT)
+             && bot_.Query()->Placement(Util::UnitTypeIDToAbilityID(building_type), sc2::Point2D{static_cast<float>(x), static_cast<float>(y)}))
             {
                 // The first depot in a wall has to be next to, well, a wall. 
                 // This allows the depot wall to be built correctly on AbyssalReefLE.
                 //if (bot_.Config().MapName == "AbyssalReefLE" &&
                 //    information_manager_.UnitInfo().GetNumDepots(sc2::Unit::Alliance::Self) < 2
-                //    && !(IsTileCornerOfTileType(sc2::Point2DI(x, y), MapTileType::CantWalk))
+                //    && !(IsTileCornerOfTileType(sc2::Point2DI{x, y), MapTileType::CantWalk))
                 //    continue;
                     
-                if(IsTileCornerReserved(sc2::Point2DI(x, y))
+                if(IsTileCornerReserved(tile)
                  || TerrainHeight(x, y) < 10.5)
                     continue;
 
@@ -490,16 +481,15 @@ sc2::Point2DI MapTools::GetNextCoordinateToWallWithBuilding(const sc2::UnitTypeI
                 // && ((y < 49 || y > 119) || TerrainHeight(x, y) < 10.5))
                 //    continue;
 
-                const sc2::Point2D point(x, y);
+                const sc2::Point2D point = Util::Point2DIto2D(tile);
                 const double distance = Util::DistSq(point, base_location);
                 if (distance < closest_distance)
                 {
-                    closest_point = point;
-                    closest_point.x;
+                    closest_tile = tile;
                     closest_distance = distance;
                 }
             }
         }
     }
-    return sc2::Point2DI(closest_point.x, closest_point.y);
+	return closest_tile;
 }

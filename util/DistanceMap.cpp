@@ -14,8 +14,7 @@ DistanceMap::DistanceMap() { }
 
 int DistanceMap::GetDistance(int tile_x, int tile_y) const
 { 
-    assert(tile_x < width_ && tile_y < height_, "Index out of range: X = %d, Y = %d", tile_x, tile_y);
-    return dist_[tile_x][tile_y]; 
+    return dist_.at(tile_x).at(tile_y); 
 }
 
 int DistanceMap::GetDistance(const sc2::Point2DI & pos) const

@@ -277,7 +277,7 @@ int BaseLocationManager::NumberOfControlledGeysers() const
     int geyser_count = 0;
     for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
     {
-        geyser_count += base->GetGeysers().size();
+        geyser_count += static_cast<int>(base->GetGeysers().size());
     }
     return geyser_count;
 }
@@ -296,7 +296,7 @@ float BaseLocationManager::MineralIncomePerSecond() const
 // Provides a rough approximation of current gas income. 
 float BaseLocationManager::GasIncomePerSecond() const
 {
-    int return_val = 0;
+    float return_val = 0;
     for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
     {
         return_val += base->GasIncomePerSecond();
@@ -308,7 +308,7 @@ sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance pla
 {
     const BaseLocation* home_base = GetPlayerStartingBaseLocation(player);
     const BaseLocation* closest_base = nullptr;
-    int min_distance = std::numeric_limits<int>::max();
+    float min_distance = std::numeric_limits<float>::max();
 
     sc2::Point2D home_tile = home_base->GetPosition();
     
@@ -324,13 +324,11 @@ sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance pla
         const auto tile = base->GetTownHallPosition();
 
         // The base's distance from our main Town Hall.
-        const int distance_from_home = bot_.Query()->PathingDistance(tile, home_base->GetPosition());
+        const float distance_from_home = bot_.Query()->PathingDistance(tile, home_base->GetPosition());
 
         // If it is not connected, continue.
-        if (distance_from_home < 0)
-        {
+        if (distance_from_home < 0.0f)
             continue;
-        }
 
         if (!closest_base || distance_from_home < min_distance)
         {
@@ -339,7 +337,7 @@ sc2::Point2D BaseLocationManager::GetNextExpansion(const sc2::Unit::Alliance pla
         }
     }
 
-    return closest_base ? closest_base->GetTownHallPosition() : sc2::Point2D(0.0f, 0.0f);
+    return closest_base ? closest_base->GetTownHallPosition() : sc2::Point2D{0.0f, 0.0f};
 }
 
 // Find the closest not yet fully saturated base. 

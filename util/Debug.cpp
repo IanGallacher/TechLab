@@ -150,7 +150,7 @@ void DebugManager::DrawMapWalkableTiles() const
                 color = sc2::Colors::Yellow;
             }
 
-            DrawSquareOnMap(sc2::Point2DI(x, y), color);
+            DrawSquareOnMap(sc2::Point2DI{x, y}, color);
         }
     }
 }
@@ -180,7 +180,7 @@ void DebugManager::DrawAllUnitInformation() const
         ss << unit_info.second.GetJobCode() << " " << unit_info.first << std::endl;
     }
 
-    DrawTextScreen(sc2::Point2D(0.75f, 0.2f), ss.str());
+    DrawTextScreen(sc2::Point2D{0.75f, 0.2f}, ss.str());
 }
 
 void DebugManager::DrawAllSelectedUnitsDebugInfo() const
@@ -317,12 +317,12 @@ void DebugManager::DrawSidebar()
         ss << sidebar_seg.sidebar_text;
         ss << "\n\n\n";
     }
-    DrawTextScreen(sc2::Point2D(0.01f, 0.01f), ss.str(), sc2::Colors::Yellow);
+    DrawTextScreen(sc2::Point2D{0.01f, 0.01f}, ss.str(), sc2::Colors::Yellow);
     
     sidebar_info_.clear();
 }
 
-void DebugManager::DrawPoint(const float x, const float y, const sc2::Color & color) const
+void DebugManager::DrawPoint(const int x, const int y, const sc2::Color & color) const
 {
 	bot_.Debug()->DebugLineOut(sc2::Point3D(x, y, max_z_ + 0.2f), sc2::Point3D(x, y, 0), color);
 }
@@ -341,10 +341,10 @@ void DebugManager::DrawLine(const sc2::Point2D & min, const sc2::Point2D max, co
 void DebugManager::DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color & color) const
 {
     // Add 0.5f to make sure the z coordinate does not intersect with the terrain.
-    const float zcoordx1y1 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D(x1, y1)) + 0.5f;
-    const float zcoordx1y2 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D(x1, y2)) + 0.5f;
-    const float zcoordx2y1 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D(x2, y1)) + 0.5f;
-    const float zcoordx2y2 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D(x2, y2)) + 0.5f;
+    const float zcoordx1y1 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x1, y1)) + 0.5f;
+    const float zcoordx1y2 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x1, y2)) + 0.5f;
+    const float zcoordx2y1 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x2, y1)) + 0.5f;
+    const float zcoordx2y2 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x2, y2)) + 0.5f;
 
     const float x1 = tile.x - 0.5f;
     const float x2 = tile.x + 0.5f;
@@ -400,13 +400,15 @@ void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2:
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2DI unit_pos, const sc2::Color color) const
 {
-    DrawBoxAroundUnit(unit_type, sc2::Point3D(unit_pos.x, unit_pos.y, information_manager_.Map().TerrainHeight(unit_pos.x, unit_pos.y)), color);
+    DrawBoxAroundUnit(unit_type, sc2::Point3D(static_cast<float>(unit_pos.x), 
+											  static_cast<float>(unit_pos.y),
+		                                      information_manager_.Map().TerrainHeight(unit_pos.x, unit_pos.y)), color);
 }
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point3D unit_pos, const sc2::Color color) const
 {
     // In Starcraft 2, units are square. Get either the width or height, and divide by 2 to get radius. 
-    const float radius = Util::GetUnitTypeHeight(unit_type, bot_)/2;
+    const float radius = static_cast<float>(Util::GetUnitTypeHeight(unit_type, bot_))/2.0f;
 
     sc2::Point3D p_min = unit_pos;
     p_min.x -= radius;

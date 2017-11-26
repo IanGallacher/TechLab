@@ -62,6 +62,7 @@ public:
     int     PlayableMapWidth() const;
     int     PlayableMapHeight() const;
 
+	float   TerrainHeight(const int x, const int y) const;
     float   TerrainHeight(float x, float y) const;
     
     bool    IsOnMap(int x, int y) const;

@@ -30,7 +30,8 @@ public:
     void AddToSidebar(std::string text, sc2::Color color = sc2::Colors::White);
     void DrawSidebar();
 
-	void DrawPoint(const float x1, const float y1, const sc2::Color & color) const;
+	void DrawPoint(const int x, const int y, const sc2::Color & color) const;
+
     void DrawLine(float x1, float y1, float x2, float y2, const sc2::Color& color = sc2::Colors::White) const;
     void DrawLine(const sc2::Point2D& min, const sc2::Point2D max, const sc2::Color& color = sc2::Colors::White) const;
 

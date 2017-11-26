@@ -24,7 +24,7 @@ namespace Util
     bool IsCompleted(const sc2::Unit* unit);
 	float GetAttackRate(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     float GetAttackRange(const sc2::UnitTypeID & type, const sc2::Agent & bot);
-    float GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot);
+    int   GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     
     bool UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & type, sc2::Agent & bot);
     sc2::UnitTypeID WhatBuilds(const sc2::UnitTypeID & type);
@@ -57,4 +57,7 @@ namespace Util
     sc2::AbilityID  UnitTypeIDToAbilityID(const sc2::UnitTypeID & id);
     bool CanAttackAir(std::vector<sc2::Weapon> weapons);
     int  GetGameTimeInSeconds(const sc2::Agent& bot);
+
+	sc2::Point2DI ToPoint2DI(sc2::Point2D point);
+	sc2::Point2D ToPoint2D(sc2::Point2DI point);
 };

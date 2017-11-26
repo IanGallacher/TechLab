@@ -55,7 +55,7 @@ BaseLocation::BaseLocation(sc2::Agent & bot, const std::vector<const sc2::Unit*>
     // Calculate the center of the resources.
     size_t num_resources = minerals_.size() + geysers_.size();
 
-    center_of_resources_ = sc2::Point2D(left_ + (right_-left_)/2.0f, top_ + (bottom_-top_)/2.0f);
+    center_of_resources_ = sc2::Point2D{left_ + (right_-left_)/2.0f, top_ + (bottom_-top_)/2.0f};
 
     // Check to see if this is a start location for the map.
     for (auto & pos : bot_.Observation()->GetGameInfo().enemy_start_locations)
@@ -178,7 +178,7 @@ bool BaseLocation::IsBaseFullySaturated() const
 // Warning: does not check to see if the tile is on the map. 
 bool BaseLocation::ContainsPosition(const sc2::Point2D & pos) const
 {
-    return GetGroundDistance(pos) < NearBaseLocationTileDistance;
+    return Util::Dist(pos, center_of_resources_) < NearBaseLocationTileDistance;
 }
 
 // Returns -1 if no workers are Mining.
@@ -214,7 +214,7 @@ float BaseLocation::MineralIncomePerSecond() const
     // For now, we will use a simplified version of the equation.
     // A worker will on average return 55 minerals per minute
     // 55/60 = 0.91666 = minerals per second per harvester. 
-    return town_hall_->assigned_harvesters * 0.91666;
+    return town_hall_->assigned_harvesters * 0.91666f;
 }
 
 // Provides a rough approximation of current gas income. 
@@ -226,13 +226,7 @@ float BaseLocation::GasIncomePerSecond() const
         j += geyser->assigned_harvesters;
     }
     // 35/60 to get harester income rate. 
-    return j * 0.58333;
-}
-
-int BaseLocation::GetGroundDistance(const sc2::Point2D & pos) const
-{
-    return Util::Dist(pos, center_of_resources_);
-    //return distanceMap.getDistance(pos);
+    return j * 0.58333f;
 }
 
 bool BaseLocation::IsStartLocation() const

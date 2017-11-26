@@ -78,21 +78,21 @@ void InformationManager::OnFrame()
         const auto unit_info = unit_info_pair.second;
         const int damage = Util::GetAttackDamage(unit_info.type, bot_);
         if (damage == 0) continue;
-        int range = Util::GetAttackRange(unit_info.type, bot_) +1;
+        int range = static_cast<int>(Util::GetAttackRange(unit_info.type, bot_)) +1;
         //  Melee units are dangerous too.
         if (range == 0 && !Util::IsBuilding(unit_info.type)) range = 2;
 
-        for (int y = 0; y < dps_map_.size(); ++y)
+        for (float y = 0; y < dps_map_.size(); ++y)
         {
-            for (int x = 0; x < dps_map_[y].size(); ++x)
+            for (float x = 0; x < dps_map_[y].size(); ++x)
             {
                 for (float falloff = 0; falloff < 25; ++falloff)
                 {
                     // Danger zone falloff only applies to army units. 
                     if (!Util::IsWorker(unit_info.unit) && falloff > 1)
-                        if (Util::DistSq(sc2::Point2D(x, y), unit_info.lastPosition) <= (range*range + falloff*falloff))
+                        if (Util::DistSq(sc2::Point2D{x, y}, unit_info.lastPosition) <= static_cast<float>(range*range + falloff*falloff))
                         {
-                            dps_map_[y][x] += static_cast<float>(damage)/( (falloff * 2) +1 );
+                            dps_map_[y][x] += static_cast<float>( damage/(falloff*2 + 1) );
                             break;
                         }
                 }
@@ -127,7 +127,6 @@ UnitInfoManager & InformationManager::UnitInfo()
 
 const sc2::Race & InformationManager::GetPlayerRace(sc2::Unit::Alliance player) const
 {
-    assert(player < 1 || player_race_.size(), "invalid player for GetPlayerRace");
     return player_race_.at(player);
 }
 
@@ -271,8 +270,7 @@ const sc2::Unit* InformationManager::FindNeutralUnitAtPosition(const sc2::Point2
 {
     for (const auto unit : unit_info_.GetUnits(sc2::Unit::Alliance::Neutral))
     {
-        if (sc2::Point2DI(static_cast<float>(unit->pos.x),
-            static_cast<float>(unit->pos.y)) == point)
+        if (Util::Point2Dto2DI(unit->pos) == point)
         {
             return unit;
         }

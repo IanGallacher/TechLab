@@ -149,7 +149,7 @@ int Util::GetGasPrice(const sc2::UnitTypeID type, const sc2::Agent & bot)
 
 int Util::GetSupplyProvided(const sc2::UnitTypeID type, const sc2::Agent & bot)
 {
-	return bot.Observation()->GetUnitTypeData()[type].food_provided;
+	return static_cast<int>(bot.Observation()->GetUnitTypeData()[type].food_provided);
 }
 
 int Util::GetUnitTypeWidth(const sc2::UnitTypeID type, const sc2::Agent & bot)
@@ -189,7 +189,7 @@ sc2::Point2D Util::CalcCenterOfUnitGroup(const std::vector<const sc2::Unit*>& un
 {
     if (units.empty())
     {
-        return sc2::Point2D(0.0f,0.0f);
+        return sc2::Point2D{0.0f,0.0f};
     }
 
     float cx = 0.0f;
@@ -201,7 +201,7 @@ sc2::Point2D Util::CalcCenterOfUnitGroup(const std::vector<const sc2::Unit*>& un
         cy += unit->pos.y;
     }
 
-    return sc2::Point2D(cx / units.size(), cy / units.size());
+    return sc2::Point2D{cx / units.size(), cy / units.size()};
 }
 
 bool Util::IsDetector(const sc2::Unit* unit)
@@ -225,7 +225,7 @@ float Util::GetAttackRange(const sc2::UnitTypeID & type, const sc2::Agent & bot)
     return max_range;
 }
 
-float Util::GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot)
+int Util::GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot)
 {
     auto & weapons = bot.Observation()->GetUnitTypeData()[type].weapons;
 
@@ -235,7 +235,7 @@ float Util::GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot
         max_damage = weapon.damage_ * weapon.attacks;
     }
 
-    return max_damage;
+    return static_cast<int>(max_damage);
 }
 
 float Util::GetAttackRate(const sc2::UnitTypeID & type, const sc2::Agent & bot)
@@ -323,9 +323,9 @@ bool Util::IsSupplyProvider(const sc2::Unit* unit)
 
 float Util::Dist(const int x1, const int y1, const int x2, const int y2)
 {
-    const float dx = x1 - x2;
-    const float dy = y1 - y2;
-    return dx*dx + dy*dy;
+    const int dx = x1 - x2;
+    const int dy = y1 - y2;
+    return static_cast<float>(dx*dx + dy*dy);
 }
 
 float Util::Dist(const sc2::Point2D & p1, const sc2::Point2D & p2)
@@ -355,11 +355,9 @@ float Util::DistSq(const sc2::Point2DI & p1, const sc2::Point2D & p2)
 
 bool Util::Pathable(const sc2::GameInfo & info, const sc2::Point2D & point) 
 {
-    const sc2::Point2DI point_i(point.x, point.y);
+	const sc2::Point2DI point_i = Util::ToPoint2DI(point);
     if (point_i.x < 0 || point_i.x >= info.width || point_i.y < 0 || point_i.y >= info.width)
-    {
         return false;
-    }
 
     assert(info.pathing_grid.data.size() == info.width * info.height);
     const unsigned char encoded_placement = info.pathing_grid.data[point_i.x + ((info.height - 1) - point_i.y) * info.width];
@@ -414,8 +412,7 @@ sc2::Race Util::GetRaceFromString(const std::string & race_in)
         return sc2::Race::Random;
     }
 
-    assert(false, "Unknown Race: ", race.c_str());
-    return sc2::Race::Terran;
+	throw "Invalid race!";
 }
 
 sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
@@ -531,7 +528,7 @@ sc2::UnitTypeID Util::WhatBuilds(const sc2::UnitTypeID & type)
 
 int Util::DPSAtPoint(const sc2::Point2D unit_pos, const sc2::Agent& bot)
 {
-    float total_dps = 0;
+    int total_dps = 0;
     for (auto & enemyunit : bot.Observation()->GetUnits(sc2::Unit::Alliance::Enemy))
     {
         const float dist = Util::Dist(enemyunit->pos, unit_pos);
@@ -747,6 +744,7 @@ bool Util::CanAttackAir(std::vector<sc2::Weapon> weapons)
     }
     return false;
 }
+
 int Util::GetGameTimeInSeconds(const sc2::Agent& bot)
 {
     return bot.Observation()->GetGameLoop() / 22;
@@ -839,4 +837,18 @@ bool Util::UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & ty
     }
 
     return false;
+}
+
+sc2::Point2DI Util::ToPoint2DI(sc2::Point2D point)
+{
+	return sc2::Point2DI{static_cast<int>(point.x),
+	                     static_cast<int>(point.y)
+	};
+}
+
+sc2::Point2D Util::ToPoint2D(sc2::Point2DI point)
+{
+	return sc2::Point2D{static_cast<float>(point.x),
+                        static_cast<float>(point.y)
+	};
 }

@@ -55,28 +55,26 @@ const std::map<sc2::Tag, UnitInfo>& UnitInfoManager::GetUnitInfoMap(const sc2::U
 
 const std::vector<const sc2::Unit*>& UnitInfoManager::GetUnits(sc2::Unit::Alliance player) const
 {
-    assert(units_.find(player) != units_.end(), "Couldn't find player units: %d", player);
-
     return units_.at(player);
 }
 
 // passing in a unit type of 0 returns a count of all units
-size_t UnitInfoManager::GetUnitTypeCount(const sc2::Unit::Alliance player, const sc2::UnitTypeID type, const bool include_incomplete_buildings) const
+int UnitInfoManager::GetUnitTypeCount(const sc2::Unit::Alliance player, const sc2::UnitTypeID type, const bool include_incomplete_buildings) const
 {
-    size_t count = 0;
+    int count = 0;
 
     for (auto & unit : GetUnits(player))
     {
         if ( (!type || Util::IsUnitOfType(unit, type, bot_)) && (include_incomplete_buildings || unit->build_progress == 1.0f) )
         {
-            count++;
+            ++count;
         }
     }
 
     return count;
 }
 
-size_t UnitInfoManager::GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const
+int UnitInfoManager::GetNumberOfCompletedTownHalls(sc2::Unit::Alliance player) const
 {
     return GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_COMMANDCENTER, false)
          + GetUnitTypeCount(player, sc2::UNIT_TYPEID::TERRAN_ORBITALCOMMAND, false)
@@ -208,6 +206,7 @@ int UnitInfoManager::GetNumDepots(sc2::Unit::Alliance self) const
 {
     return GetUnitTypeCount(sc2::Unit::Alliance::Self, sc2::UNIT_TYPEID::TERRAN_SUPPLYDEPOT);
 }
+
 // Does not look for flying bases. Only landed bases. 
 const sc2::Unit* UnitInfoManager::GetClosestBase(const sc2::Unit* reference_unit, sc2::Unit::Alliance base_owner) const
 {
