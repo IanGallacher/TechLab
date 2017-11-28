@@ -26,6 +26,7 @@ namespace Util
     float GetAttackRange(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     int   GetAttackDamage(const sc2::UnitTypeID & type, const sc2::Agent & bot);
     
+    bool UnitHasAbilityAvailable(const sc2::Unit * unit, const sc2::AbilityID & ability, sc2::Agent & bot);
     bool UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & type, sc2::Agent & bot);
     sc2::UnitTypeID WhatBuilds(const sc2::UnitTypeID & type);
 	int DPSAtPoint(const sc2::Point2D unit_pos, const sc2::Agent& bot);

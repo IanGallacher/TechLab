@@ -814,31 +814,32 @@ bool Util::IsBuilding(const sc2::UnitTypeID & type)
     }
 }
 
-// checks where a given unit can make a given unit type now
-// this is done by iterating its legal abilities for the build command to make the unit
-bool Util::UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & type, sc2::Agent & bot)
+// Can the unit use the given ability?
+bool Util::UnitHasAbilityAvailable(const sc2::Unit* unit, const sc2::AbilityID & ability, sc2::Agent & bot)
 {
     sc2::AvailableAbilities available_abilities = bot.Query()->GetAbilitiesForUnit(unit);
-    
+
     // quick check if the unit can't do anything it certainly can't build the thing we want
-    if (available_abilities.abilities.empty()) 
+    if (available_abilities.abilities.empty())
     {
         return false;
     }
-    else 
+    else
     {
-        // check to see if one of the unit's available abilities matches the build ability type
-        const sc2::AbilityID build_type_ability = Util::UnitTypeIDToAbilityID(type);
-        for (const sc2::AvailableAbility & available_ability : available_abilities.abilities) 
+        for (const sc2::AvailableAbility & available_ability : available_abilities.abilities)
         {
-            if (available_ability.ability_id == build_type_ability)
-            {
+            if (available_ability.ability_id == ability) 
                 return true;
-            }
         }
     }
 
     return false;
+}
+
+// Checks where a given unit can make a given unit type
+bool Util::UnitCanBuildTypeNow(const sc2::Unit* unit, const sc2::UnitTypeID & type, sc2::Agent & bot)
+{
+    return Util::UnitHasAbilityAvailable(unit, Util::UnitTypeIDToAbilityID(type), bot);
 }
 
 sc2::Point2DI Util::ToPoint2DI(sc2::Point2D point)
