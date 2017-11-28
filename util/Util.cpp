@@ -118,11 +118,13 @@ sc2::UnitTypeID Util::GetTownHall(const sc2::Race & race)
 
 bool Util::IsCompleted(const sc2::Unit* unit)
 {
+    if (unit == nullptr) return false;
     return unit->build_progress == 1.0f;
 }
 
 bool Util::IsIdle(const sc2::Unit* unit)
 {
+    if (unit == nullptr) return false;
     return unit->orders.empty();
 }
 
