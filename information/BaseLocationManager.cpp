@@ -141,9 +141,9 @@ void BaseLocationManager::OnFrame(InformationManager & info)
 
         if (base_location != nullptr)
         {
-            base_location->SetPlayerOccupying(Util::GetPlayer(unit), true);
             if (Util::IsTownHall(unit))
             {
+                base_location->SetPlayerOccupying(Util::GetPlayer(unit), true);
                 base_location->SetTownHall(unit);
             }
         }
@@ -277,7 +277,8 @@ int BaseLocationManager::NumberOfControlledGeysers() const
     int geyser_count = 0;
     for (const auto & base : GetOccupiedBaseLocations(sc2::Unit::Alliance::Self))
     {
-        geyser_count += static_cast<int>(base->GetGeysers().size());
+        if(Util::IsCompleted(base->GetTownHall()))
+            geyser_count += static_cast<int>(base->GetGeysers().size());
     }
     return geyser_count;
 }
