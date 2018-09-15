@@ -367,7 +367,7 @@ bool Util::Pathable(const sc2::GameInfo & info, const sc2::Point2D & point)
     return decoded_placement;
 }
 
-bool Util::Placement(const sc2::GameInfo & info, const sc2::Point2D & point) 
+bool Util::CanPlace(const sc2::GameInfo & info, const sc2::Point2D & point) 
 {
     const sc2::Point2DI point_i(static_cast<int>(point.x), static_cast<int>(point.y));
     if (point_i.x < 0 || point_i.x >= info.width || point_i.y < 0 || point_i.y >= info.width)

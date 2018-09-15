@@ -127,6 +127,11 @@ void UnitData::SetJob(const sc2::Unit* unit, const UnitMission job, const sc2::U
 
     UnitInfo & ui = unit_info_map_[unit->tag];
 
+    if (worker_job_count_.find(job) == worker_job_count_.end())
+        worker_job_count_[job] = 0;
+    worker_job_count_[job]++;
+    worker_job_count_[ui.GetMission()]--;
+
     // Update the information about the current job. 
     if (job == UnitMission::Minerals)
     {
@@ -217,6 +222,11 @@ std::set<const UnitInfo*> UnitData::GetWorkers() const
 std::set<const UnitInfo*> UnitData::GetScouts() const
 {
     return scout_units_;
+}
+
+int UnitData::GetNumWorkersWithJob(const UnitMission job) const
+{
+	return worker_job_count_[job];
 }
 
 int UnitData::GetNumRepairWorkers(const sc2::Unit* unit) const

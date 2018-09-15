@@ -49,7 +49,7 @@ void MapTools::OnStart()
         for (int y=0; y < true_map_height_; ++y)
         {
 			const auto tile = sc2::Point2D{ static_cast<float>(x), static_cast<float>(y) };
-            buildable_[x][y]        = Util::Placement(bot_.Observation()->GetGameInfo(), tile);
+            buildable_[x][y]        = Util::CanPlace(bot_.Observation()->GetGameInfo(), tile);
             walkable_[x][y]         = buildable_[x][y] || Util::Pathable(bot_.Observation()->GetGameInfo(), tile);
             terrain_height_[x][y]   = bot_.Observation()->TerrainHeight(tile);
         }
@@ -62,16 +62,16 @@ void MapTools::OnFrame()
 {
     ++frame_;
 
-    for (int x=0; x<true_map_width_; ++x)
-    {
-        for (int y=0; y<true_map_height_; ++y)
-        {
-            if (IsVisible(sc2::Point2D{static_cast<float>(x), static_cast<float>(y)}))
-            {
-                last_seen_[x][y] = frame_;
-            }
-        }
-    }
+    //for (int x=0; x<true_map_width_; ++x)
+    //{
+    //    for (int y=0; y<true_map_height_; ++y)
+    //    {
+    //        if (IsVisible(sc2::Point2D{static_cast<float>(x), static_cast<float>(y)}))
+    //        {
+    //            last_seen_[x][y] = frame_;
+    //        }
+    //    }
+    //}
 }
 
 void MapTools::ComputeConnectivity()

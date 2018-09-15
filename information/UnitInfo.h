@@ -33,6 +33,10 @@ struct UnitInfo
 
     }
 
+    UnitMission GetMission() {
+        return mission;
+    }
+
     std::string GetJobCode() const
     {
         const UnitMission j = mission;

@@ -200,6 +200,11 @@ int UnitInfoManager::GetNumRepairWorkers(const sc2::Unit* unit) const
     return GetUnitData(sc2::Unit::Alliance::Self).GetNumRepairWorkers(unit);
 }
 
+int UnitInfoManager::GetNumWorkersWithJob(const UnitMission job) const
+{
+    return GetUnitData(sc2::Unit::Alliance::Self).GetNumWorkersWithJob(job);
+}
+
 // The game considers raised and lowered supply depots as different units. 
 // This gets the total number you have, regardless if they are raised or lower. 
 int UnitInfoManager::GetNumDepots(sc2::Unit::Alliance self) const

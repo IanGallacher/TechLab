@@ -50,7 +50,7 @@ namespace Util
     float DistSq(const sc2::Point2DI & p1, const sc2::Point2D & p2);
     
     // Kevin-provided helper functions
-    bool    Placement(const sc2::GameInfo& info, const sc2::Point2D& point);
+    bool    CanPlace(const sc2::GameInfo& info, const sc2::Point2D& point);
     bool    Pathable(const sc2::GameInfo& info, const sc2::Point2D& point);
     
     bool    IsBuilding(const sc2::UnitTypeID & type);

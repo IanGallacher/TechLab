@@ -7,6 +7,7 @@
 
 
 float max_z_ = 13;
+bool debug_build = false;
 
 DebugManager::DebugManager(sc2::Agent & bot, InformationManager & information_manager)
     : bot_(bot)
@@ -16,6 +17,8 @@ DebugManager::DebugManager(sc2::Agent & bot, InformationManager & information_ma
 
 void DebugManager::DrawUnitMissionOnUnit() const
 {
+    if(!debug_build) return;
+
     const std::map<sc2::Tag, UnitInfo> ui = information_manager_.UnitInfo().GetUnitInfoMap(sc2::Unit::Alliance::Self);
 
     for (auto const & unit_info : ui)
@@ -33,6 +36,7 @@ void DebugManager::DrawUnitMissionOnUnit() const
 
 void DebugManager::DrawEnemyDPSMap(std::vector<std::vector<float>> dps_map) const
 {
+    if (!debug_build) return;
     for(int y = 0; y < dps_map.size(); ++y)
     {
         for (int x = 0; x < dps_map[y].size(); ++x)
@@ -45,6 +49,7 @@ void DebugManager::DrawEnemyDPSMap(std::vector<std::vector<float>> dps_map) cons
 
 void DebugManager::DrawMapSectors() const
 {
+    if (!debug_build) return;
     for (int y = 0; y < information_manager_.Map().TrueMapHeight(); ++y)
     {
         for (int x = 0; x < information_manager_.Map().TrueMapWidth(); ++x)
@@ -62,6 +67,7 @@ void DebugManager::DrawMapSectors() const
 
 void DebugManager::DrawBaseLocations() const
 {
+    if (!debug_build) return;
     for (auto & base_location : information_manager_.Bases().GetBaseLocations())
     {
         DrawBaseLocation(*base_location);
@@ -76,6 +82,7 @@ void DebugManager::DrawBaseLocations() const
 
 void DebugManager::DrawBaseLocation(const BaseLocation & base_location) const 
 {
+    if (!debug_build) return;
     const sc2::Point2D base_pos = base_location.GetPosition();
     DrawSphere(base_pos, 1.0f, sc2::Colors::Yellow);
 
@@ -135,6 +142,7 @@ void DebugManager::DrawBaseLocation(const BaseLocation & base_location) const
 
 void DebugManager::DrawMapWalkableTiles() const
 {
+    if (!debug_build) return;
     const sc2::Point2D camera = bot_.Observation()->GetCameraPos();
     for (int y = 0; y < information_manager_.Map().TrueMapHeight(); ++y)
     {
@@ -171,6 +179,7 @@ void DebugManager::DrawMapWalkableTiles() const
 
 void DebugManager::DrawAllUnitInformation() const
 {
+    if (!debug_build) return;
     std::stringstream ss;
     const std::map<sc2::Tag, UnitInfo> ui = information_manager_.UnitInfo().GetUnitInfoMap(sc2::Unit::Alliance::Self);
 
@@ -185,6 +194,7 @@ void DebugManager::DrawAllUnitInformation() const
 
 void DebugManager::DrawAllSelectedUnitsDebugInfo() const
 {
+    if (!debug_build) return;
     const sc2::Unit* unit = nullptr;
     for (const sc2::Unit* unit : bot_.Observation()->GetUnits())
     {
@@ -205,6 +215,7 @@ std::string GetAbilityText(const sc2::AbilityID ability_id) {
 
 void DebugManager::DrawUnitDebugInfo(const sc2::Unit* unit) const
 {
+    if (!debug_build) return;
     if (!unit) return;
 
     auto query = bot_.Query();
@@ -310,6 +321,7 @@ void DebugManager::AddToSidebar(std::string text, sc2::Color color)
 
 void DebugManager::DrawSidebar()
 {
+    if (!debug_build) return;
     std::stringstream ss;
 
     for (SidebarSegment sidebar_seg : sidebar_info_)
@@ -324,22 +336,26 @@ void DebugManager::DrawSidebar()
 
 void DebugManager::DrawPoint(const int x, const int y, const sc2::Color & color) const
 {
+    if (!debug_build) return;
 	bot_.Debug()->DebugLineOut(sc2::Point3D(x, y, max_z_ + 0.2f), sc2::Point3D(x, y, 0), color);
 }
 
 void DebugManager::DrawLine(const float x1, const float y1, const float x2, const float y2, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugLineOut(sc2::Point3D(x1, y1, max_z_ + 0.2f), sc2::Point3D(x2, y2, max_z_ + 0.2f), color);
 }
 
 void DebugManager::DrawLine(const sc2::Point2D & min, const sc2::Point2D max, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugLineOut(sc2::Point3D(min.x, min.y, max_z_ + 0.2f), sc2::Point3D(max.x, max.y, max_z_ + 0.2f), color);
 }
 
 #pragma region LowLevelPrivateFunctions
 void DebugManager::DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     // Add 0.5f to make sure the z coordinate does not intersect with the terrain.
     const float zcoordx1y1 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x1, y1)) + 0.5f;
     const float zcoordx1y2 = 12; // bot_.Observation()->TerrainHeight(sc2::Point2D{x1, y2)) + 0.5f;
@@ -360,46 +376,55 @@ void DebugManager::DrawSquareOnMap(const sc2::Point2DI tile, const sc2::Color & 
 
 void DebugManager::DrawBox(const float x1, const float y1, const float x2, const float y2, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugBoxOut(sc2::Point3D(x1, y1, max_z_ + 2.0f), sc2::Point3D(x2, y2, max_z_ - 5.0f), color);
 }
 
 void DebugManager::DrawBox(const sc2::Point3D& min, const sc2::Point2D max, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugBoxOut(sc2::Point3D(min.x, min.y, max_z_ + 5.0f), sc2::Point3D(max.x, max.y, max_z_ - 5.0f), color);
 }
 
 void DebugManager::DrawBox(const sc2::Point3D & min, const sc2::Point3D max, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugBoxOut(sc2::Point3D(min.x, min.y, min.z), sc2::Point3D(max.x, max.y, max.z), color);
 }
 
 void DebugManager::DrawSphere(const sc2::Point2D& pos, const float radius, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugSphereOut(sc2::Point3D(pos.x, pos.y, max_z_), radius, color);
 }
 
 void DebugManager::DrawSphere(const float x, const float y, const float radius, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugSphereOut(sc2::Point3D(x, y, max_z_), radius, color);
 }
 
 void DebugManager::DrawText(const sc2::Point2D & pos, const std::string & str, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugTextOut(str, sc2::Point3D(pos.x, pos.y, max_z_), color, 24);
 }
 
 void DebugManager::DrawTextScreen(const sc2::Point2D& pos, const std::string & str, const sc2::Color & color) const
 {
+    if (!debug_build) return;
     bot_.Debug()->DebugTextOut(str, pos, color, 24);
 }
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2D unit_pos, const sc2::Color color) const
 {
+    if (!debug_build) return;
     DrawBoxAroundUnit(unit_type, sc2::Point3D(unit_pos.x, unit_pos.y, information_manager_.Map().TerrainHeight(unit_pos.x, unit_pos.y)), color);
 }
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point2DI unit_pos, const sc2::Color color) const
 {
+    if (!debug_build) return;
     DrawBoxAroundUnit(unit_type, sc2::Point3D(static_cast<float>(unit_pos.x), 
 											  static_cast<float>(unit_pos.y),
 		                                      information_manager_.Map().TerrainHeight(unit_pos.x, unit_pos.y)), color);
@@ -407,6 +432,7 @@ void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2:
 
 void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2::Point3D unit_pos, const sc2::Color color) const
 {
+    if (!debug_build) return;
     // In Starcraft 2, units are square. Get either the width or height, and divide by 2 to get radius. 
     const float radius = static_cast<float>(Util::GetUnitTypeHeight(unit_type, bot_))/2.0f;
 
@@ -425,6 +451,7 @@ void DebugManager::DrawBoxAroundUnit(const sc2::UnitTypeID unit_type, const sc2:
 
 void DebugManager::DrawBoxAroundUnit(const sc2::Unit* unit, const sc2::Color color) const
 {
+    if (!debug_build) return;
     if (!unit) { std::cout << "Warning. No unit was given to drawBoxAroundUnit" << std::endl; return; }
 
     sc2::Point3D p_min = unit->pos;
@@ -442,6 +469,7 @@ void DebugManager::DrawBoxAroundUnit(const sc2::Unit* unit, const sc2::Color col
 
 void DebugManager::DrawSphereAroundUnit(const sc2::Unit* unit, const sc2::Color color) const
 {
+    if (!debug_build) return;
     if (!unit) { return; }
 
     DrawSphere(unit->pos, unit->radius, color);

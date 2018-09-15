@@ -28,6 +28,7 @@ class UnitData
     // Keep track of how many units are currenlty repairing a given unit.
     // Marked as mutable. If we are checking if an element in the map exists, create one if it does not. 
     mutable std::map<sc2::Tag, int >       unit_repair_chart_;
+	mutable std::map<UnitMission, int >    worker_job_count_;
 
     // These vectors are effectively maps. 
     // They have every UnitTypeID. 
@@ -57,5 +58,6 @@ public:
     void ClearPreviousJob(const sc2::Unit* unit);
     std::set<const UnitInfo*> GetWorkers() const;
     std::set<const UnitInfo*> GetScouts() const;
+	int GetNumWorkersWithJob(const UnitMission job) const;
     int GetNumRepairWorkers(const sc2::Unit* unit) const;
 };
